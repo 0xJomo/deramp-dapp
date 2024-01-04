@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-evenly px-12">
@@ -20,8 +22,10 @@ export default function Home() {
       </div>
 
       <button className="bg-purple-500 h-12 hover:bg-purple-700 text-white font-bold rounded-3xl min-w-full">
-        Next
+        <Link to="/payment">
+          Next
+        </Link>
       </button>
     </main>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-export default function PaymentMethods() {
+export default function Payment() {
   return (
     <main className="flex min-h-screen flex-col mx-8 my-16">
       <h4>
@@ -10,7 +10,6 @@ export default function PaymentMethods() {
           <img
             src="/images/revolut.png"
             alt="revolut"
-            className=""
           />
           <div className="flex flex-col items-start mx-4">
             <h3 className="text-l font-bold">Revolut</h3>
