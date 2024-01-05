@@ -1,4 +1,11 @@
+import { useUserContext } from '../context/UserContext.tsx';
+
 export default function Payment() {
+
+  const { amount } = useUserContext()
+
+  console.log(amount)
+
   return (
     <main className="flex min-h-screen flex-col mx-8 my-16">
       <h4>
