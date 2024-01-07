@@ -4,6 +4,7 @@ import { useState } from "react";
 import Home from './pages/Home';
 import Payment from './pages/Payment'
 import ReviewOrder from './pages/ReviewOrder'
+import LockOrder from './pages/LockOrder'
 import { UserContext } from './context/UserContext.tsx';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
           <Route path='/' element={<Home />} />
           <Route path='/payment' element={<Payment />} />
           <Route path='/review' element={<ReviewOrder />} />
+          <Route path='/lock' element={<LockOrder />} />
         </Routes>
       </UserContext.Provider>
     </BrowserRouter>

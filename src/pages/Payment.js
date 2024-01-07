@@ -6,9 +6,9 @@ export default function Payment() {
 
   return (
     <main className="flex min-h-screen flex-col mx-8 my-16">
-      <h6>
+      <p>
         Choose a peer-to-peer transfer method
-      </h6>
+      </p>
 
       <button className="my-8 bg-gray-500 rounded-2xl p-4" onClick={() => navigate("/review")}>
         <div className="flex flex-row items-center">
