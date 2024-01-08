@@ -37,7 +37,7 @@ export default function Home() {
             onChange={handleInputChangeAndAdjustWidth}
           />
         </div>
-        <h3 className="text-xl font-bold">0.00 USDC</h3>
+        <h3 className="text-xl font-bold">{text || 0}.00 USDC</h3>
       </div>
 
       <div className="flex flex-row items-center justify-between">

@@ -1,5 +1,6 @@
 import OrderDisplay from "./OrderDisplay"
 import { useUserContext } from '../context/UserContext.tsx';
+import { useState, useEffect } from "react";
 
 function ConfirmTransferBottomsheet() {
   return (
@@ -14,6 +15,20 @@ function ConfirmTransferBottomsheet() {
       <p className="my-4">
         Return to Revolut to complete my transfer
       </p>
+    </div>
+  )
+}
+
+function SendWithRevolutBottomsheet() {
+  return (
+    <div className="flex flex-col items-center fixed inset-x-0 bottom-0 p-4 bg-white shadow-lg">
+      <h2 className="mb-4">Send with Revolut</h2>
+      <p className="text-center">Please complete your transfer of exactly $100.05 on Revolut to @arthaud, then verify the transaction on DeRamp.
+        Transferring more than $100.05 could result in a loss of funds.
+      </p>
+      <button className="bg-purple-500 h-12 hover:bg-purple-700 text-white font-bold rounded-3xl min-w-full mt-8">
+        Go to Revolut
+      </button>
     </div>
   )
 }
@@ -38,6 +53,8 @@ function AddJomoCopilotBottomsheet() {
 export default function LockOrder() {
 
   const { amount } = useUserContext()
+  // reviewOrder, pendingSendFiat, pendingVerifyTransfer, addCopilot, pendingVerifyWithCopilot, verifying, verified, received
+  const [orderStatus, setOrderStatus] = useState("reviewOrder")
 
   return (
     <main className="flex min-h-screen flex-col mx-8 my-16">
@@ -62,11 +79,11 @@ export default function LockOrder() {
         </div>
       </div>
 
-      <button className="bg-purple-500 h-12 hover:bg-purple-700 text-white font-bold rounded-3xl min-w-full mt-16">
+      <button className="bg-purple-500 h-12 hover:bg-purple-700 text-white font-bold rounded-3xl min-w-full mt-16" onClick={() => setOrderStatus("pendingSendFiat")}>
         Send with Revolut
       </button>
 
-      <AddJomoCopilotBottomsheet />
+      {orderStatus === "pendingSendFiat" && <SendWithRevolutBottomsheet />}
     </main>
   )
 }
