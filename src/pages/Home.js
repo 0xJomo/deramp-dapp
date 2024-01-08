@@ -13,7 +13,13 @@ export default function Home() {
     navigate("/payment")
   }
 
-  const handleInputChange = (e) => {
+  const handleInputChangeAndAdjustWidth = (e) => {
+    const value = e.target.value;
+    if (value.length === 0) {
+      e.target.style.width = '2em';
+    } else {
+      e.target.style.width = `${value.length}ch`;
+    }
     setText(e.target.value);
   };
 
@@ -26,9 +32,9 @@ export default function Home() {
           <input
             type="text"
             value={text}
-            onChange={handleInputChange}
-            className='text-5xl font-extrabold focus:outline-none w-24'
+            className='text-5xl font-extrabold focus:outline-none w-8'
             placeholder='0'
+            onChange={handleInputChangeAndAdjustWidth}
           />
         </div>
         <h3 className="text-xl font-bold">0.00 USDC</h3>

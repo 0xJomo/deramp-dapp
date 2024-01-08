@@ -4,22 +4,22 @@
 
 @layer base {
   h1 {
-    @apply text-5xl font-extrabold dark:text-white;
+    @apply text-5xl font-extrabold;
   }
   h2 {
-    @apply text-4xl font-bold dark:text-white;
+    @apply text-4xl font-bold;
   }
   h3 {
-    @apply text-3xl font-bold dark:text-white;
+    @apply text-3xl font-bold;
   }
   h4 {
-    @apply text-2xl font-bold dark:text-white;
+    @apply text-2xl font-bold;
   }
   h5 {
-    @apply text-xl font-bold dark:text-white
+    @apply text-xl font-bold;
   }
   h6 {
-    @apply text-lg font-bold dark:text-white
+    @apply text-lg font-bold;
   }
 }
 
