@@ -18,6 +18,23 @@ function ConfirmTransferBottomsheet() {
   )
 }
 
+function AddJomoCopilotBottomsheet() {
+  return (
+    <div className="flex flex-col items-center fixed inset-x-0 bottom-0 p-4 bg-white shadow-lg">
+      <h2>Add Jomo Copilot</h2>
+      <p className="text-center">Jomo Copilot on Firefox is required to verify peer-to-peer transfers on apps like Revolut
+        and Venmo to then send you crypto on-chain. Jomo uses cryptography so that your user data is not read or stored any where.
+      </p>
+      <button className="bg-purple-500 h-12 hover:bg-purple-700 text-white font-bold rounded-3xl min-w-full mt-8">
+        I have completed my transfer
+      </button>
+      <p className="my-4">
+        Add Jomo Copilot on Firefox
+      </p>
+    </div>
+  )
+}
+
 export default function LockOrder() {
 
   const { amount } = useUserContext()
@@ -49,7 +66,7 @@ export default function LockOrder() {
         Send with Revolut
       </button>
 
-      <ConfirmTransferBottomsheet />
+      <AddJomoCopilotBottomsheet />
     </main>
   )
 }
