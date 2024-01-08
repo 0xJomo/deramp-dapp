@@ -1,9 +1,10 @@
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react';
 import { useUserContext } from '../context/UserContext.tsx';
 import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
   const { setAmount } = useUserContext()
+  const [text, setText] = useState(null);
   const navigate = useNavigate();
 
   const setAmountAndRedirect = (value) => {
@@ -12,11 +13,24 @@ export default function Home() {
     navigate("/payment")
   }
 
+  const handleInputChange = (e) => {
+    setText(e.target.value);
+  };
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-evenly px-12">
 
       <div className="flex flex-col items-center justify-between">
-        <h1 className="text-5xl font-extrabold my-8">$0</h1>
+        <div className='flex flex-row items-center justify-center my-8'>
+          <h1>$</h1>
+          <input
+            type="text"
+            value={text}
+            onChange={handleInputChange}
+            className='text-5xl font-extrabold focus:outline-none w-24'
+            placeholder='0'
+          />
+        </div>
         <h3 className="text-xl font-bold">0.00 USDC</h3>
       </div>
 
@@ -32,11 +46,9 @@ export default function Home() {
         </button>
       </div>
 
-      <button className="bg-purple-500 h-12 hover:bg-purple-700 text-white font-bold rounded-3xl min-w-full">
-        <Link to="/payment">
-          Next
-        </Link>
+      <button className="bg-purple-500 h-12 hover:bg-purple-700 text-white font-bold rounded-3xl min-w-full" onClick={() => setAmountAndRedirect(parseInt(text))}>
+        Next
       </button>
-    </main>
+    </main >
   );
 }

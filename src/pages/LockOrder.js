@@ -4,7 +4,7 @@ import { useUserContext } from '../context/UserContext.tsx';
 function ConfirmTransferBottomsheet() {
   return (
     <div className="flex flex-col items-center fixed inset-x-0 bottom-0 p-4 bg-white shadow-lg">
-      <h2>Confirm transfer</h2>
+      <h2 className="mb-4">Confirm transfer</h2>
       <p className="text-center">Please complete your transfer of exactly $100.05 on Revolut to @arthaud, then
         verify the transaction on DeRamp. Transferring more than $100.05 could result in a loss of funds.
       </p>
@@ -21,7 +21,7 @@ function ConfirmTransferBottomsheet() {
 function AddJomoCopilotBottomsheet() {
   return (
     <div className="flex flex-col items-center fixed inset-x-0 bottom-0 p-4 bg-white shadow-lg">
-      <h2>Add Jomo Copilot</h2>
+      <h2 className="mb-4">Add Jomo Copilot</h2>
       <p className="text-center">Jomo Copilot on Firefox is required to verify peer-to-peer transfers on apps like Revolut
         and Venmo to then send you crypto on-chain. Jomo uses cryptography so that your user data is not read or stored any where.
       </p>
