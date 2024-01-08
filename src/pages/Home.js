@@ -16,7 +16,7 @@ export default function Home() {
   const handleInputChangeAndAdjustWidth = (e) => {
     const value = e.target.value;
     if (value.length === 0) {
-      e.target.style.width = '2em';
+      e.target.style.width = '2rem';
     } else {
       e.target.style.width = `${value.length}ch`;
     }
