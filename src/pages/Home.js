@@ -8,6 +8,7 @@ export default function Home() {
 
   const setAmountAndRedirect = (value) => {
     setAmount(value);
+    localStorage.setItem("amount", value);
     navigate("/payment")
   }
 
