@@ -26,7 +26,7 @@ export default function OrderDisplay({ useGrayBackground = false }) {
         <p className='text-lg'>Arbitrum</p>
       </div>
 
-      <div class="h-[1px] bg-gray-500 w-full my-8"></div>
+      <div className="h-[1px] bg-gray-500 w-full my-8"></div>
 
       <div className='flex flex-row justify-between'>
         <p className='text-lg'>Rate</p>
