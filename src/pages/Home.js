@@ -1,9 +1,15 @@
-import { usePrivy } from '@privy-io/react-auth';
+import { useNavigate } from 'react-router-dom';
+import { usePrivySmartAccount } from '@zerodev/privy';
 
 export default function Home() {
-  const { login, logout, ready, authenticated, user } = usePrivy();
+  const { login, logout, ready, authenticated, user, zeroDevReady, sendTransaction } = usePrivySmartAccount();
+  const navigate = useNavigate();
 
   if (ready && authenticated) {
+    // navigate('/onramp')
+  }
+
+  if (zeroDevReady) {
     console.log(user)
   }
 
