@@ -5,12 +5,9 @@ export default function Home() {
   const { login, logout, ready, authenticated, user, zeroDevReady, sendTransaction } = usePrivySmartAccount();
   const navigate = useNavigate();
 
-  if (ready && authenticated) {
-    // navigate('/onramp')
-  }
-
-  if (zeroDevReady) {
+  if (ready && authenticated && zeroDevReady) {
     console.log(user)
+    navigate("/profile")
   }
 
   return (

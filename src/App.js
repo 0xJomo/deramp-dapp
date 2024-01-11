@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { useState } from "react";
 import OnRamp from './pages/OnRamp';
 import Home from './pages/Home';
+import Profile from './pages/Profile';
 import Payment from './pages/Payment'
 import ReviewOrder from './pages/ReviewOrder'
 import LockOrder from './pages/LockOrder'
@@ -34,6 +35,7 @@ function App() {
           <UserContext.Provider value={{ user, setUser, amount, setAmount }}>
             <Routes>
               <Route path='/' element={<Home />} />
+              <Route path='/profile' element={<Profile />} />
               <Route path='/onramp' element={<OnRamp />} />
               <Route path='/payment' element={<Payment />} />
               <Route path='/review' element={<ReviewOrder />} />
