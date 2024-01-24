@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useUserContext } from '../context/UserContext.tsx';
 import { useNavigate } from 'react-router-dom';
+import { Typography, Stack, Button } from '@mui/material';
 
 export default function OnRamp() {
   const { setAmount } = useUserContext()
@@ -24,11 +25,11 @@ export default function OnRamp() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-evenly px-12">
+    <Stack justifyContent="space-evenly" alignItems="center" sx={{ paddingX: 1.5, minHeight: "100vh" }}>
 
-      <div className="flex flex-col items-center justify-between">
-        <div className='flex flex-row items-center justify-center my-8'>
-          <h1>$</h1>
+      <Stack alignItems="center" justifyContent="space-between" >
+        <Stack flexDirection="row" alignItems="center" justifyContent="center" sx={{ marginY: 2 }}>
+          <Typography variant="h3">$</Typography>
           <input
             type="text"
             value={text}
@@ -36,25 +37,25 @@ export default function OnRamp() {
             placeholder='0'
             onChange={handleInputChangeAndAdjustWidth}
           />
-        </div>
-        <h3 className="text-xl font-bold">{text || 0}.00 USDC</h3>
-      </div>
+        </Stack>
+        <h3>{text || 0}.00 USDC</h3>
+      </Stack>
 
-      <div className="flex flex-row items-center justify-between">
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-3xl m-4" onClick={() => setAmountAndRedirect(20)}>
+      <Stack flexDirection="row" justifyContent="space-between">
+        <Button color="info" variant="contained" sx={{ fontWeight: 700, paddingY: 0.5, paddingX: 1, borderRadius: 1.5, margin: 1 }} onClick={() => setAmountAndRedirect(20)}>
           $20
-        </button>
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-3xl m-4" onClick={() => setAmountAndRedirect(50)}>
+        </Button>
+        <Button color="info" variant="contained" sx={{ fontWeight: 700, paddingY: 0.5, paddingX: 1, borderRadius: 1.5, margin: 1 }} onClick={() => setAmountAndRedirect(50)}>
           $50
-        </button>
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-3xl m-4" onClick={() => setAmountAndRedirect(100)}>
+        </Button>
+        <Button color="info" variant="contained" sx={{ fontWeight: 700, paddingY: 0.5, paddingX: 1, borderRadius: 1.5, margin: 1 }} onClick={() => setAmountAndRedirect(100)}>
           $100
-        </button>
-      </div>
+        </Button>
+      </Stack>
 
-      <button className="bg-purple-500 h-12 hover:bg-purple-700 text-white font-bold rounded-3xl min-w-full" onClick={() => setAmountAndRedirect(parseInt(text))}>
+      <Button color="secondary" variant="contained" sx={{ fontWeight: 700, borderRadius: 1.5, minWidth: "100%" }} onClick={() => setAmountAndRedirect(parseInt(text))}>
         Next
-      </button>
-    </main >
+      </Button>
+    </Stack >
   );
 }

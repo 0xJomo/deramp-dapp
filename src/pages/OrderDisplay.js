@@ -1,5 +1,6 @@
 import { useUserContext } from '../context/UserContext.tsx';
 import { useEffect } from 'react';
+import { Typography, Stack, Button, Divider } from '@mui/material';
 
 export default function OrderDisplay({ useGrayBackground = false }) {
 
@@ -12,36 +13,36 @@ export default function OrderDisplay({ useGrayBackground = false }) {
   }, [setAmount])
 
   return (
-    <div className={componentClass}>
-      <h4>Get ${amount} of USDC</h4>
-      <p className='text-lg'>Est. {amount} USDC</p>
+    <Stack className={componentClass}>
+      <Typography variant="h5">Get ${amount} of USDC</Typography>
+      <Typography>Est. {amount} USDC</Typography>
 
-      <div className='flex flex-row justify-between mt-16'>
-        <p className='text-lg'>Transfer method</p>
-        <p className='text-lg'>Revolut</p>
-      </div>
+      <Stack flexDirection="row" justifyContent="space-between" sx={{ marginTop: 4 }} >
+        <Typography variant="subtitle1">Transfer method</Typography>
+        <Typography>Revolut</Typography>
+      </Stack>
 
-      <div className='flex flex-row justify-between mt-8'>
-        <p className='text-lg'>Network</p>
-        <p className='text-lg'>Arbitrum</p>
-      </div>
+      <Stack flexDirection="row" justifyContent="space-between" sx={{ marginTop: 4 }} >
+        <Typography variant="subtitle1">Network</Typography>
+        <Typography>Arbitrum</Typography>
+      </Stack>
 
-      <div className="h-[1px] bg-gray-500 w-full my-8"></div>
+      <Divider sx={{ marginTop: 4 }} />
 
-      <div className='flex flex-row justify-between'>
-        <p className='text-lg'>Rate</p>
-        <p className='text-lg'>1 USDC = $1.00</p>
-      </div>
+      <Stack flexDirection="row" justifyContent="space-between" sx={{ marginTop: 4 }} >
+        <Typography variant="subtitle1">Rate</Typography>
+        <Typography>1 USDC = $1.00</Typography>
+      </Stack>
 
-      <div className='flex flex-row justify-between mt-8'>
-        <p className='text-lg'>Fee</p>
-        <p className='text-lg'>$0.05</p>
-      </div>
+      <Stack flexDirection="row" justifyContent="space-between" sx={{ marginTop: 4 }} >
+        <Typography variant="subtitle1">Fee</Typography>
+        <Typography>$0.05</Typography>
+      </Stack>
 
-      <div className='flex flex-row justify-between mt-8'>
-        <p className='text-lg font-bold'>Total cost</p>
-        <p className='text-lg'>${parseInt(amount) + 0.05}</p>
-      </div>
-    </div>
+      <Stack flexDirection="row" justifyContent="space-between" sx={{ marginTop: 4 }} >
+        <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>Total cost</Typography>
+        <Typography>${parseInt(amount) + 0.05}</Typography>
+      </Stack>
+    </Stack>
   )
 }

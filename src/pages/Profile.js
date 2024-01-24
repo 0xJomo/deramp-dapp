@@ -1,35 +1,37 @@
 import { useNavigate } from 'react-router-dom';
 import { usePrivySmartAccount } from '@zerodev/privy';
+import { Typography, Stack, Button } from '@mui/material';
 
 export default function Profile() {
   const { login, logout, ready, authenticated, user, zeroDevReady, sendTransaction } = usePrivySmartAccount();
   const navigate = useNavigate();
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-start px-12">
-      <h1 className='mt-24 mb-8'>$100.00</h1>
+    <Stack justifyContent="flex-start" alignItems="center" sx={{ minHeight: "100vh", paddingX: 3 }}>
+      <Typography variant="h3" sx={{ marginTop: 6, marignBottom: 2 }}>$100.00</Typography>
 
-      <div className="flex flex-row min-w-full">
-        <button className="bg-purple-500 h-12 hover:bg-purple-700 text-white font-bold rounded-3xl min-w-28 mr-4" onClick={() => navigate("/onramp")}>
+      <Stack flexDirection="row">
+        <Button color="secondary" variant="contained" sx={{ fontWeight: 700, borderRadius: 1.5, minWidth: 7, marginRight: 1 }} onClick={() => navigate("/onramp")}>
           Get Crypto
-        </button>
-        <button className="bg-purple-500 h-12 hover:bg-purple-700 text-white font-bold rounded-3xl min-w-28">
+        </Button>
+        <Button color="secondary" variant="contained" sx={{ fontWeight: 700, borderRadius: 1.5, minWidth: 7, marginRight: 1 }}>
           Cash Out
-        </button>
-      </div>
+        </Button>
+      </Stack>
 
-      <div className="flex flex-row min-w-full mt-8 items-center">
+      <Stack sx={{ minWidth: "100%", marginTop: 2 }} flexDirection="row">
         <img
           src="/images/USDC.png"
           alt="USDC"
-          className='w-12 h-12 mr-4'
+          width={48}
+          height={48}
         />
-        <div className="flex flex-col grow">
-          <h6>USDC</h6>
+        <Stack flexGrow={1} sx={{ marginLeft: 1 }}>
+          <Typography variant="h6">USDC</Typography >
           <p>100.00 USDC</p>
-        </div>
-        <h6>$100.00</h6>
-      </div>
-    </main >
+        </Stack>
+        <Typography variant="h6">$100.00</Typography>
+      </Stack>
+    </Stack >
   );
 }

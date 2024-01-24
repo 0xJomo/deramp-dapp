@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { usePrivySmartAccount } from '@zerodev/privy';
+import { Button } from '@mui/base/Button';
 
 export default function Home() {
   const { login, logout, ready, authenticated, user, zeroDevReady, sendTransaction } = usePrivySmartAccount();
@@ -15,9 +16,9 @@ export default function Home() {
       <h1>DeRamp</h1>
 
       <div className="flex flex-col min-w-full">
-        <button className="bg-purple-500 h-12 hover:bg-purple-700 text-white font-bold rounded-3xl min-w-full" onClick={login}>
+        <Button className="bg-purple-500 h-12 hover:bg-purple-700 text-white font-bold rounded-3xl min-w-full" onClick={login}>
           Get Crypto
-        </button>
+        </Button>
         {ready && authenticated && <p className="text-center mt-4" onClick={logout}>
           Log out
         </p>}

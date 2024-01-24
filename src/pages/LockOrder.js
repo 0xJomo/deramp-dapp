@@ -1,6 +1,7 @@
 import OrderDisplay from "./OrderDisplay"
 import { useUserContext } from '../context/UserContext.tsx';
 import { useState, useEffect } from "react";
+import { Button } from '@mui/material';
 
 function ConfirmTransferBottomsheet() {
   return (
@@ -9,9 +10,9 @@ function ConfirmTransferBottomsheet() {
       <p className="text-center">Please complete your transfer of exactly $100.05 on Revolut to @arthaud, then
         verify the transaction on DeRamp. Transferring more than $100.05 could result in a loss of funds.
       </p>
-      <button className="bg-purple-500 h-12 hover:bg-purple-700 text-white font-bold rounded-3xl min-w-full mt-8">
+      <Button>
         I have completed my transfer
-      </button>
+      </Button>
       <p className="my-4">
         Return to Revolut to complete my transfer
       </p>
@@ -26,9 +27,9 @@ function SendWithRevolutBottomsheet() {
       <p className="text-center">Please complete your transfer of exactly $100.05 on Revolut to @arthaud, then verify the transaction on DeRamp.
         Transferring more than $100.05 could result in a loss of funds.
       </p>
-      <button className="bg-purple-500 h-12 hover:bg-purple-700 text-white font-bold rounded-3xl min-w-full mt-8">
+      <Button>
         Go to Revolut
-      </button>
+      </Button>
     </div>
   )
 }
@@ -40,9 +41,9 @@ function AddJomoCopilotBottomsheet() {
       <p className="text-center">Jomo Copilot on Firefox is required to verify peer-to-peer transfers on apps like Revolut
         and Venmo to then send you crypto on-chain. Jomo uses cryptography so that your user data is not read or stored any where.
       </p>
-      <button className="bg-purple-500 h-12 hover:bg-purple-700 text-white font-bold rounded-3xl min-w-full mt-8">
+      <Button>
         I have completed my transfer
-      </button>
+      </Button>
       <p className="my-4">
         Add Jomo Copilot on Firefox
       </p>
@@ -79,9 +80,9 @@ export default function LockOrder() {
         </div>
       </div>
 
-      <button className="bg-purple-500 h-12 hover:bg-purple-700 text-white font-bold rounded-3xl min-w-full mt-16" onClick={() => setOrderStatus("pendingSendFiat")}>
+      <Button onClick={() => setOrderStatus("pendingSendFiat")}>
         Send with Revolut
-      </button>
+      </Button>
 
       {orderStatus === "pendingSendFiat" && <SendWithRevolutBottomsheet />}
     </main>
