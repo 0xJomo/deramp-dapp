@@ -28,7 +28,7 @@ export default function Profile() {
         />
         <Stack flexGrow={1} sx={{ marginLeft: 1 }}>
           <Typography variant="h6">USDC</Typography >
-          <p>100.00 USDC</p>
+          <Typography>100.00 USDC</Typography>
         </Stack>
         <Typography variant="h6">$100.00</Typography>
       </Stack>

@@ -38,7 +38,7 @@ export default function OnRamp() {
             onChange={handleInputChangeAndAdjustWidth}
           />
         </Stack>
-        <h3>{text || 0}.00 USDC</h3>
+        <Typography>{text || 0}.00 USDC</Typography>
       </Stack>
 
       <Stack flexDirection="row" justifyContent="space-between">

@@ -1,17 +1,18 @@
 import OrderDisplay from "./OrderDisplay"
 import { useNavigate } from 'react-router-dom';
+import { Stack, Button } from '@mui/material';
 
 export default function ReviewOrder() {
 
   const navigate = useNavigate();
 
   return (
-    <main className="flex min-h-screen flex-col mx-8 my-16">
+    <Stack sx={{ minHeight: "100vh", marginX: 2, marginY: 4 }}>
       <OrderDisplay />
 
-      <button className="bg-purple-500 h-12 hover:bg-purple-700 text-white font-bold rounded-3xl min-w-full mt-16" onClick={() => navigate("/lock")}>
+      <Button variant="contained" sx={{ borderRadius: 1.5, minWidth: "100%", marginTop: 4 }} onClick={() => navigate("/lock")}>
         Continue
-      </button>
-    </main>
+      </Button>
+    </Stack>
   )
 }

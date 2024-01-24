@@ -1,53 +1,54 @@
 import OrderDisplay from "./OrderDisplay"
 import { useUserContext } from '../context/UserContext.tsx';
 import { useState, useEffect } from "react";
-import { Button } from '@mui/material';
+import { Typography, Stack, Button, Box } from '@mui/material';
 
 function ConfirmTransferBottomsheet() {
   return (
-    <div className="flex flex-col items-center fixed inset-x-0 bottom-0 p-4 bg-white shadow-lg">
-      <h2 className="mb-4">Confirm transfer</h2>
-      <p className="text-center">Please complete your transfer of exactly $100.05 on Revolut to @arthaud, then
+    <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "white" }}>
+      <Typography variant="h5">Confirm transfer</Typography>
+      <Typography textAlign={"center"}>Please complete your transfer of exactly $100.05 on Revolut to @arthaud, then
         verify the transaction on DeRamp. Transferring more than $100.05 could result in a loss of funds.
-      </p>
+      </Typography>
       <Button>
         I have completed my transfer
       </Button>
-      <p className="my-4">
+      <Typography sx={{ marginY: 1 }}>
         Return to Revolut to complete my transfer
-      </p>
-    </div>
+      </Typography>
+    </Stack>
   )
 }
 
 function SendWithRevolutBottomsheet() {
   return (
-    <div className="flex flex-col items-center fixed inset-x-0 bottom-0 p-4 bg-white shadow-lg">
-      <h2 className="mb-4">Send with Revolut</h2>
-      <p className="text-center">Please complete your transfer of exactly $100.05 on Revolut to @arthaud, then verify the transaction on DeRamp.
+    <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "white" }}>
+      <Typography variant="h5">Send with Revolut</Typography>
+      <Typography textAlign={"center"}>Please complete your transfer of exactly $100.05 on Revolut to @arthaud, then verify the transaction on DeRamp.
         Transferring more than $100.05 could result in a loss of funds.
-      </p>
-      <Button>
+      </Typography>
+      <Button variant="contained">
         Go to Revolut
       </Button>
-    </div>
+    </Stack>
   )
 }
 
 function AddJomoCopilotBottomsheet() {
   return (
-    <div className="flex flex-col items-center fixed inset-x-0 bottom-0 p-4 bg-white shadow-lg">
-      <h2 className="mb-4">Add Jomo Copilot</h2>
-      <p className="text-center">Jomo Copilot on Firefox is required to verify peer-to-peer transfers on apps like Revolut
+    <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "white" }}>
+      <Typography variant="h5">Add Jomo Copilot</Typography>
+      <Typography textAlign={"center"}>
+        Jomo Copilot on Firefox is required to verify peer-to-peer transfers on apps like Revolut
         and Venmo to then send you crypto on-chain. Jomo uses cryptography so that your user data is not read or stored any where.
-      </p>
-      <Button>
+      </Typography>
+      <Button variant="contained">
         I have completed my transfer
       </Button>
-      <p className="my-4">
+      <Typography sx={{ marginY: 1 }}>
         Add Jomo Copilot on Firefox
-      </p>
-    </div>
+      </Typography>
+    </Stack>
   )
 }
 
@@ -58,33 +59,33 @@ export default function LockOrder() {
   const [orderStatus, setOrderStatus] = useState("reviewOrder")
 
   return (
-    <main className="flex min-h-screen flex-col mx-8 my-16">
+    <Stack sx={{ minHeight: "100vh", marginX: 2, marginY: 4 }}>
       <OrderDisplay useGrayBackground={true} />
 
-      <div className="mt-8">
-        <p className="font-bold mb-8">Complete your transfer on Revolut</p>
+      <Stack sx={{ marginTop: 4 }}>
+        <Typography fontWeight="bold" sx={{ marginBottom: 2 }}>Complete your transfer on Revolut</Typography>
 
-        <div className="flex flex-row justify-left items-center mb-8">
-          <div class="w-10 h-10 bg-gray-500 rounded-full mr-4"></div>
-          <p className="font-bold">Send ${amount} on Revolut</p>
-        </div>
+        <Stack flexDirection="row" alignItems="center" sx={{ marginBottom: 2 }} >
+          <Box sx={{ width: 40, height: 40, borderRadius: "50%", backgroundColor: "gray", marginRight: 2 }} />
+          <Typography fontWeight="bold">Send ${amount} on Revolut</Typography>
+        </Stack>
 
-        <div className="flex flex-row justify-left items-center mb-8">
-          <div class="w-10 h-10 border-2 border-gray-500 rounded-full mr-4"></div>
-          <p className="font-bold">Verify Revolut transfer</p>
-        </div>
+        <Stack flexDirection="row" alignItems="center" sx={{ marginBottom: 2 }} >
+          <Box sx={{ width: 40, height: 40, borderRadius: "50%", backgroundColor: "gray", marginRight: 2 }} />
+          <Typography fontWeight="bold">Verify Revolut transfer</Typography>
+        </Stack>
 
-        <div className="flex flex-row justify-left items-center mb-8">
-          <div class="w-10 h-10 border-2 border-gray-500 rounded-full mr-4"></div>
-          <p className="font-bold">Receive ${amount} of USDC on DeRamp</p>
-        </div>
-      </div>
+        <Stack flexDirection="row" alignItems="center" sx={{ marginBottom: 2 }} >
+          <Box sx={{ width: 40, height: 40, borderRadius: "50%", backgroundColor: "gray", marginRight: 2 }} />
+          <Typography fontWeight="bold">Receive ${amount} of USDC on DeRamp</Typography>
+        </Stack>
+      </Stack>
 
       <Button onClick={() => setOrderStatus("pendingSendFiat")}>
         Send with Revolut
       </Button>
 
       {orderStatus === "pendingSendFiat" && <SendWithRevolutBottomsheet />}
-    </main>
+    </Stack >
   )
 }
