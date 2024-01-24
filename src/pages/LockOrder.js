@@ -5,12 +5,12 @@ import { Typography, Stack, Button, Box } from '@mui/material';
 
 function ConfirmTransferBottomsheet() {
   return (
-    <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "white" }}>
-      <Typography variant="h5">Confirm transfer</Typography>
-      <Typography textAlign={"center"}>Please complete your transfer of exactly $100.05 on Revolut to @arthaud, then
+    <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "lightgrey", padding: 2, borderRadius: "16px 16px 0 0" }}>
+      <Typography variant="h3" sx={{ marginTop: 2 }}>Confirm transfer</Typography>
+      <Typography textAlign={"center"} sx={{ marginY: 2 }}>Please complete your transfer of exactly $100.05 on Revolut to @arthaud, then
         verify the transaction on DeRamp. Transferring more than $100.05 could result in a loss of funds.
       </Typography>
-      <Button>
+      <Button variant="contained" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 6 }}>
         I have completed my transfer
       </Button>
       <Typography sx={{ marginY: 1 }}>
@@ -22,12 +22,12 @@ function ConfirmTransferBottomsheet() {
 
 function SendWithRevolutBottomsheet() {
   return (
-    <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "white" }}>
-      <Typography variant="h5">Send with Revolut</Typography>
-      <Typography textAlign={"center"}>Please complete your transfer of exactly $100.05 on Revolut to @arthaud, then verify the transaction on DeRamp.
+    <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "lightgrey", padding: 2, borderRadius: "16px 16px 0 0" }}>
+      <Typography variant="h3" sx={{ marginTop: 2 }}>Send with Revolut</Typography>
+      <Typography textAlign={"center"} sx={{ marginY: 2 }}>Please complete your transfer of exactly $100.05 on Revolut to @arthaud, then verify the transaction on DeRamp.
         Transferring more than $100.05 could result in a loss of funds.
       </Typography>
-      <Button variant="contained">
+      <Button variant="contained" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 6 }}>
         Go to Revolut
       </Button>
     </Stack>
@@ -36,13 +36,13 @@ function SendWithRevolutBottomsheet() {
 
 function AddJomoCopilotBottomsheet() {
   return (
-    <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "white" }}>
-      <Typography variant="h5">Add Jomo Copilot</Typography>
-      <Typography textAlign={"center"}>
+    <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "lightgrey", padding: 2, borderRadius: "16px 16px 0 0" }}>
+      <Typography variant="h3" sx={{ marginTop: 2 }}>Add Jomo Copilot</Typography>
+      <Typography textAlign={"center"} sx={{ marginY: 2 }}>
         Jomo Copilot on Firefox is required to verify peer-to-peer transfers on apps like Revolut
         and Venmo to then send you crypto on-chain. Jomo uses cryptography so that your user data is not read or stored any where.
       </Typography>
-      <Button variant="contained">
+      <Button variant="contained" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 6 }}>
         I have completed my transfer
       </Button>
       <Typography sx={{ marginY: 1 }}>
