@@ -10,7 +10,7 @@ export default function ReviewOrder() {
     <Stack sx={{ minHeight: "100vh", marginX: 2, marginY: 4 }}>
       <OrderDisplay />
 
-      <Button variant="contained" sx={{ borderRadius: 1.5, minWidth: "100%", marginTop: 4 }} onClick={() => navigate("/lock")}>
+      <Button variant="contained" sx={{ borderRadius: 4, minWidth: "100%", marginTop: 4 }} onClick={() => navigate("/lock")}>
         Continue
       </Button>
     </Stack>

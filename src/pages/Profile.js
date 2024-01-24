@@ -8,7 +8,7 @@ export default function Profile() {
 
   return (
     <Stack justifyContent="flex-start" alignItems="center" sx={{ minHeight: "100vh", paddingX: 3 }}>
-      <Typography variant="h3" sx={{ marginTop: 6, marignBottom: 2 }}>$100.00</Typography>
+      <Typography variant="h2" sx={{ marginTop: 6, marginBottom: 2 }}>$100.00</Typography>
 
       <Stack flexDirection="row">
         <Button color="secondary" variant="contained" sx={{ fontWeight: 700, borderRadius: 1.5, minWidth: 7, marginRight: 1 }} onClick={() => navigate("/onramp")}>
@@ -19,7 +19,7 @@ export default function Profile() {
         </Button>
       </Stack>
 
-      <Stack sx={{ minWidth: "100%", marginTop: 2 }} flexDirection="row">
+      <Stack sx={{ minWidth: "100%", marginTop: 4 }} flexDirection="row">
         <img
           src="/images/USDC.png"
           alt="USDC"

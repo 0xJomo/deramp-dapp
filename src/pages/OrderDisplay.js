@@ -18,29 +18,29 @@ export default function OrderDisplay({ useGrayBackground = false }) {
       <Typography>Est. {amount} USDC</Typography>
 
       <Stack flexDirection="row" justifyContent="space-between" sx={{ marginTop: 4 }} >
-        <Typography variant="subtitle1">Transfer method</Typography>
+        <Typography>Transfer method</Typography>
         <Typography>Revolut</Typography>
       </Stack>
 
       <Stack flexDirection="row" justifyContent="space-between" sx={{ marginTop: 4 }} >
-        <Typography variant="subtitle1">Network</Typography>
+        <Typography>Network</Typography>
         <Typography>Arbitrum</Typography>
       </Stack>
 
       <Divider sx={{ marginTop: 4 }} />
 
       <Stack flexDirection="row" justifyContent="space-between" sx={{ marginTop: 4 }} >
-        <Typography variant="subtitle1">Rate</Typography>
+        <Typography>Rate</Typography>
         <Typography>1 USDC = $1.00</Typography>
       </Stack>
 
       <Stack flexDirection="row" justifyContent="space-between" sx={{ marginTop: 4 }} >
-        <Typography variant="subtitle1">Fee</Typography>
+        <Typography>Fee</Typography>
         <Typography>$0.05</Typography>
       </Stack>
 
       <Stack flexDirection="row" justifyContent="space-between" sx={{ marginTop: 4 }} >
-        <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>Total cost</Typography>
+        <Typography variant="subtitle1">Total cost</Typography>
         <Typography>${parseInt(amount) + 0.05}</Typography>
       </Stack>
     </Stack>

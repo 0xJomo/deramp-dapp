@@ -11,6 +11,7 @@ import { UserContext } from './context/UserContext.tsx';
 import { PrivyProvider } from '@privy-io/react-auth';
 import { ZeroDevProvider } from '@zerodev/privy';
 import typography from './theme/typography.ts';
+import palette from './theme/palette.ts';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 function App() {
@@ -22,7 +23,8 @@ function App() {
   }
 
   const theme = createTheme({
-    typography: typography
+    typography: typography,
+    palette: palette("light"),
   });
 
   return (

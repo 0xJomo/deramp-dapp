@@ -59,29 +59,29 @@ export default function LockOrder() {
   const [orderStatus, setOrderStatus] = useState("reviewOrder")
 
   return (
-    <Stack sx={{ minHeight: "100vh", marginX: 2, marginY: 4 }}>
+    <Stack sx={{ minHeight: "100vh", marginX: 2, marginY: 4, padding: 1 }}>
       <OrderDisplay useGrayBackground={true} />
 
       <Stack sx={{ marginTop: 4 }}>
-        <Typography fontWeight="bold" sx={{ marginBottom: 2 }}>Complete your transfer on Revolut</Typography>
+        <Typography variant="h5" sx={{ marginBottom: 2 }}>Complete your transfer on Revolut</Typography>
 
         <Stack flexDirection="row" alignItems="center" sx={{ marginBottom: 2 }} >
           <Box sx={{ width: 40, height: 40, borderRadius: "50%", backgroundColor: "gray", marginRight: 2 }} />
-          <Typography fontWeight="bold">Send ${amount} on Revolut</Typography>
+          <Typography variant="subtitle1">Send ${amount} on Revolut</Typography>
         </Stack>
 
         <Stack flexDirection="row" alignItems="center" sx={{ marginBottom: 2 }} >
           <Box sx={{ width: 40, height: 40, borderRadius: "50%", backgroundColor: "gray", marginRight: 2 }} />
-          <Typography fontWeight="bold">Verify Revolut transfer</Typography>
+          <Typography variant="subtitle1">Verify Revolut transfer</Typography>
         </Stack>
 
         <Stack flexDirection="row" alignItems="center" sx={{ marginBottom: 2 }} >
           <Box sx={{ width: 40, height: 40, borderRadius: "50%", backgroundColor: "gray", marginRight: 2 }} />
-          <Typography fontWeight="bold">Receive ${amount} of USDC on DeRamp</Typography>
+          <Typography variant="subtitle1">Receive ${amount} of USDC on DeRamp</Typography>
         </Stack>
       </Stack>
 
-      <Button onClick={() => setOrderStatus("pendingSendFiat")}>
+      <Button variant="contained" sx={{ borderRadius: 6, marginTop: 4 }} onClick={() => setOrderStatus("pendingSendFiat")}>
         Send with Revolut
       </Button>
 

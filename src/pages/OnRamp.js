@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { useUserContext } from '../context/UserContext.tsx';
 import { useNavigate } from 'react-router-dom';
 import { Typography, Stack, Button } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 export default function OnRamp() {
   const { setAmount } = useUserContext()
   const [text, setText] = useState(null);
   const navigate = useNavigate();
+  const theme = useTheme()
 
   const setAmountAndRedirect = (value) => {
     setAmount(value);
@@ -29,7 +31,7 @@ export default function OnRamp() {
 
       <Stack alignItems="center" justifyContent="space-between" >
         <Stack flexDirection="row" alignItems="center" justifyContent="center" sx={{ marginY: 2 }}>
-          <Typography variant="h3">$</Typography>
+          <Typography variant="h2">$</Typography>
           <input
             type="text"
             value={text}
@@ -38,22 +40,22 @@ export default function OnRamp() {
             onChange={handleInputChangeAndAdjustWidth}
           />
         </Stack>
-        <Typography>{text || 0}.00 USDC</Typography>
+        <Typography variant="h5">{text || 0}.00 USDC</Typography>
       </Stack>
 
       <Stack flexDirection="row" justifyContent="space-between">
-        <Button color="info" variant="contained" sx={{ fontWeight: 700, paddingY: 0.5, paddingX: 1, borderRadius: 1.5, margin: 1 }} onClick={() => setAmountAndRedirect(20)}>
+        <Button sx={{ backgroundColor: theme.palette.secondary.dark }} variant="contained" sx={{ fontWeight: 700, paddingY: 0.5, paddingX: 1, borderRadius: 4, margin: 1 }} onClick={() => setAmountAndRedirect(20)}>
           $20
         </Button>
-        <Button color="info" variant="contained" sx={{ fontWeight: 700, paddingY: 0.5, paddingX: 1, borderRadius: 1.5, margin: 1 }} onClick={() => setAmountAndRedirect(50)}>
+        <Button sx={{ backgroundColor: theme.palette.secondary.dark }} variant="contained" sx={{ fontWeight: 700, paddingY: 0.5, paddingX: 1, borderRadius: 4, margin: 1 }} onClick={() => setAmountAndRedirect(50)}>
           $50
         </Button>
-        <Button color="info" variant="contained" sx={{ fontWeight: 700, paddingY: 0.5, paddingX: 1, borderRadius: 1.5, margin: 1 }} onClick={() => setAmountAndRedirect(100)}>
+        <Button sx={{ backgroundColor: theme.palette.secondary.dark }} variant="contained" sx={{ fontWeight: 700, paddingY: 0.5, paddingX: 1, borderRadius: 4, margin: 1 }} onClick={() => setAmountAndRedirect(100)}>
           $100
         </Button>
       </Stack>
 
-      <Button color="secondary" variant="contained" sx={{ fontWeight: 700, borderRadius: 1.5, minWidth: "100%" }} onClick={() => setAmountAndRedirect(parseInt(text))}>
+      <Button color="secondary" variant="contained" sx={{ fontWeight: 700, borderRadius: 10, minWidth: "100%" }} onClick={() => setAmountAndRedirect(parseInt(text))}>
         Next
       </Button>
     </Stack >
