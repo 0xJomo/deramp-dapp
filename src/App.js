@@ -14,6 +14,9 @@ import typography from './theme/typography.ts';
 import palette from './theme/palette.ts';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+import * as buffer from "buffer";
+window.Buffer = buffer.Buffer;
+
 function App() {
   const [user, setUser] = useState(null);
   const [amount, setAmount] = useState(null);

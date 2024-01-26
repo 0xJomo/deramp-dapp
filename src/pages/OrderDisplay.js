@@ -4,9 +4,13 @@ import { Typography, Stack, Button, Divider } from '@mui/material';
 
 export default function OrderDisplay({ useGrayBackground = false }) {
 
-  const { amount } = useUserContext()
+  const { amount, setAmount } = useUserContext()
 
   const componentClass = `rounded-2xl p-4 ${useGrayBackground ? 'bg-gray-300' : 'bg-white'}`;
+
+  useEffect(() => {
+    setAmount(localStorage.getItem('onramp_amount'))
+  }, [setAmount])
 
   return (
     <Stack className={componentClass}>

@@ -54,9 +54,13 @@ function AddJomoCopilotBottomsheet() {
 
 export default function LockOrder() {
 
-  const { amount } = useUserContext()
+  const { activeOrder, setActiveOrder } = useUserContext()
   // reviewOrder, pendingSendFiat, pendingVerifyTransfer, addCopilot, pendingVerifyWithCopilot, verifying, verified, received
   const [orderStatus, setOrderStatus] = useState("reviewOrder")
+
+  useEffect(() => {
+    setActiveOrder(JSON.parse(localStorage.getItem('active_onramp_order')))
+  }, [setActiveOrder])
 
   return (
     <Stack sx={{ minHeight: "100vh", marginX: 2, marginY: 4, padding: 1 }}>
@@ -67,7 +71,7 @@ export default function LockOrder() {
 
         <Stack flexDirection="row" alignItems="center" sx={{ marginBottom: 2 }} >
           <Box sx={{ width: 40, height: 40, borderRadius: "50%", backgroundColor: "gray", marginRight: 2 }} />
-          <Typography variant="subtitle1">Send ${amount} on Revolut</Typography>
+          <Typography variant="subtitle1">Send ${activeOrder?.amount} on Revolut</Typography>
         </Stack>
 
         <Stack flexDirection="row" alignItems="center" sx={{ marginBottom: 2 }} >
@@ -77,7 +81,7 @@ export default function LockOrder() {
 
         <Stack flexDirection="row" alignItems="center" sx={{ marginBottom: 2 }} >
           <Box sx={{ width: 40, height: 40, borderRadius: "50%", backgroundColor: "gray", marginRight: 2 }} />
-          <Typography variant="subtitle1">Receive ${amount} of USDC on DeRamp</Typography>
+          <Typography variant="subtitle1">Receive ${activeOrder?.amount} of USDC on DeRamp</Typography>
         </Stack>
       </Stack>
 

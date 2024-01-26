@@ -23,13 +23,15 @@ export default function ReviewOrder() {
       const recipient_id = "yuchennlxy"
       const tx_code = "123456"
 
-      setActiveOrder({
+      const order = {
         amount: amount,
         order_id: order_id,
         p2p_platform: p2p_platform,
         recipient_id: recipient_id,
         tx_code: tx_code,
-      })
+      }
+      setActiveOrder(order)
+      localStorage.setItem("active_onramp_order", JSON.stringify(order))
 
       navigate("/lock")
     } else {
