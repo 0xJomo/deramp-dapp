@@ -4,7 +4,9 @@ export type UserContent = {
   user: any
   setUser: (user: any) => void
   amount: number
-  setAmount: (page: number) => void
+  setAmount: (amount: number) => void
+  activeOrder: any
+  setActiveOrder: (activeOrder: any) => void
 }
 
 // default value
@@ -13,6 +15,8 @@ export const UserContext = createContext<UserContent>({
   setUser: () => { },
   amount: 0,
   setAmount: () => { },
+  activeOrder: null,
+  setActiveOrder: () => { },
 });
 
 export const useUserContext = () => useContext(UserContext)

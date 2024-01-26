@@ -17,6 +17,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 function App() {
   const [user, setUser] = useState(null);
   const [amount, setAmount] = useState(null);
+  const [activeOrder, setActiveOrder] = useState(null);
 
   const handleLogin = (user) => {
     console.log(`User ${user.id} logged in!`)
@@ -41,7 +42,7 @@ function App() {
           }}
         >
           <BrowserRouter>
-            <UserContext.Provider value={{ user, setUser, amount, setAmount }}>
+            <UserContext.Provider value={{ user, setUser, amount, setAmount, activeOrder, setActiveOrder }}>
               <Routes>
                 <Route path='/' element={<Home />} />
                 <Route path='/profile' element={<Profile />} />

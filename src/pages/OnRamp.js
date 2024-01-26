@@ -12,7 +12,6 @@ export default function OnRamp() {
 
   const setAmountAndRedirect = (value) => {
     setAmount(value);
-    localStorage.setItem("amount", value);
     navigate("/payment")
   }
 
@@ -44,13 +43,13 @@ export default function OnRamp() {
       </Stack>
 
       <Stack flexDirection="row" justifyContent="space-between">
-        <Button sx={{ backgroundColor: theme.palette.secondary.dark }} variant="contained" sx={{ fontWeight: 700, paddingY: 0.5, paddingX: 1, borderRadius: 4, margin: 1 }} onClick={() => setAmountAndRedirect(20)}>
+        <Button sx={{ backgroundColor: theme.palette.secondary.dark, fontWeight: 700, paddingY: 0.5, paddingX: 1, borderRadius: 4, margin: 1 }} variant="contained" onClick={() => setAmountAndRedirect(20)}>
           $20
         </Button>
-        <Button sx={{ backgroundColor: theme.palette.secondary.dark }} variant="contained" sx={{ fontWeight: 700, paddingY: 0.5, paddingX: 1, borderRadius: 4, margin: 1 }} onClick={() => setAmountAndRedirect(50)}>
+        <Button sx={{ backgroundColor: theme.palette.secondary.dark, fontWeight: 700, paddingY: 0.5, paddingX: 1, borderRadius: 4, margin: 1 }} variant="contained" onClick={() => setAmountAndRedirect(50)}>
           $50
         </Button>
-        <Button sx={{ backgroundColor: theme.palette.secondary.dark }} variant="contained" sx={{ fontWeight: 700, paddingY: 0.5, paddingX: 1, borderRadius: 4, margin: 1 }} onClick={() => setAmountAndRedirect(100)}>
+        <Button sx={{ backgroundColor: theme.palette.secondary.dark, fontWeight: 700, paddingY: 0.5, paddingX: 1, borderRadius: 4, margin: 1 }} variant="contained" onClick={() => setAmountAndRedirect(100)}>
           $100
         </Button>
       </Stack>
