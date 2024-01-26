@@ -22,9 +22,11 @@ export default function ReviewOrder() {
       const p2p_platform = "revolut"
       const recipient_id = "yuchennlxy"
       const tx_code = "123456"
+      const fee = 0.05
 
       const order = {
-        amount: amount,
+        amount: parseFloat(amount),
+        fee: fee,
         order_id: order_id,
         p2p_platform: p2p_platform,
         recipient_id: recipient_id,

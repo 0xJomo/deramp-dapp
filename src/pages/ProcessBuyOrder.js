@@ -16,7 +16,7 @@ export default function ProcessBuyOrder() {
     stepDetails: {
       'send_revolut_payment': {
         stepIdx: 0,
-        label: `Send $${activeOrder?.amount} on Revolut to @${activeOrder?.recipient_id}`,
+        label: `Send $${activeOrder?.amount + activeOrder?.fee} on Revolut to @${activeOrder?.recipient_id}`,
         description: ``,
       },
       'verify_revolut_paymennt': {
@@ -68,8 +68,8 @@ export default function ProcessBuyOrder() {
     return (
       <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "lightgrey", padding: 2, borderRadius: "16px 16px 0 0" }}>
         <Typography variant="h3" sx={{ marginTop: 2 }}>Confirm transfer</Typography>
-        <Typography textAlign={"center"} sx={{ marginY: 2 }}>Please complete your transfer of exactly $100.05 on Revolut to @arthaud, then
-          verify the transaction on DeRamp. Transferring more than $100.05 could result in a loss of funds.
+        <Typography textAlign={"center"} sx={{ marginY: 2 }}>Please complete your transfer of exactly ${activeOrder?.amount + activeOrder?.fee} on Revolut to @{activeOrder?.recipient_id}, then
+          verify the transaction on DeRamp. Transferring more than ${activeOrder?.amount + activeOrder?.fee} could result in a loss of funds.
         </Typography>
         <Button variant="contained" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 2 }} onClick={confirmTransferComplete}>
           I have completed my transfer
@@ -90,8 +90,8 @@ export default function ProcessBuyOrder() {
     return (
       <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "lightgrey", padding: 2, borderRadius: "16px 16px 0 0" }}>
         <Typography variant="h3" sx={{ marginTop: 2 }}>Send with Revolut</Typography>
-        <Typography textAlign={"center"} sx={{ marginY: 2 }}>Please complete your transfer of exactly $100.05 on Revolut to @arthaud, then verify the transaction on DeRamp.
-          Transferring more than $100.05 could result in a loss of funds.
+        <Typography textAlign={"center"} sx={{ marginY: 2 }}>Please complete your transfer of exactly ${activeOrder?.amount + activeOrder?.fee} on Revolut to @{activeOrder?.recipient_id}, then verify the transaction on DeRamp.
+          Transferring more than ${activeOrder?.amount + activeOrder?.fee} could result in a loss of funds.
         </Typography>
         <Button variant="contained" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 6 }} onClick={() => redirectToRevolutPayment(activeOrder)}>
           Go to Revolut
