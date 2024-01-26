@@ -33,7 +33,7 @@ export default function ReviewOrder() {
       setActiveOrder(order)
       localStorage.setItem("active_onramp_order", JSON.stringify(order))
 
-      navigate("/lock")
+      navigate("/buy")
     } else {
       // TODO: insert some error messages
     }

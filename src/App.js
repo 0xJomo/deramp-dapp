@@ -6,7 +6,7 @@ import Home from './pages/Home';
 import Profile from './pages/Profile';
 import Payment from './pages/Payment'
 import ReviewOrder from './pages/ReviewOrder'
-import LockOrder from './pages/LockOrder'
+import ProcessBuyOrder from './pages/ProcessBuyOrder.js'
 import { UserContext } from './context/UserContext.tsx';
 import { PrivyProvider } from '@privy-io/react-auth';
 import { ZeroDevProvider } from '@zerodev/privy';
@@ -52,7 +52,7 @@ function App() {
                 <Route path='/onramp' element={<OnRamp />} />
                 <Route path='/payment' element={<Payment />} />
                 <Route path='/review' element={<ReviewOrder />} />
-                <Route path='/lock' element={<LockOrder />} />
+                <Route path='/buy' element={<ProcessBuyOrder />} />
               </Routes>
             </UserContext.Provider>
           </BrowserRouter>
