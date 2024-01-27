@@ -1,15 +1,21 @@
 import OrderDisplay from "./OrderDisplay.js"
 import { useUserContext } from '../context/UserContext.tsx';
 import { useState, useEffect } from "react";
-import { Typography, Stack, Button, Link } from '@mui/material';
+import { Typography, Stack, Button, Link, CircularProgress } from '@mui/material';
 import VerticalLinearStepper from "../components/stepper/VerticalLinearStepper.tsx";
+import Iconify from '../components/iconify/Iconify.tsx';
+import { JomoTlsnNotary } from 'jomo-tlsn-sdk/dist';
 
 export default function ProcessBuyOrder() {
 
   const { activeOrder, setActiveOrder } = useUserContext()
   // reviewOrder, pendingSendFiat, pendingVerifyTransfer, addCopilot, pendingVerifyWithCopilot, verifying, verified, received
-  const [bottomSheet, setBottomSheet] = useState("reviewOrder")
+  const [bottomSheet, setBottomSheet] = useState("")
   const [activeStep, setActiveStep] = useState(0);
+
+  const revolutServer = "app.revolut.com"
+  const extensionId = "nmdnfckjjghlbjeodefnapacfnocpdgm"
+  const extensionName = "jomo-copilot"
 
   const STEPS = {
     stepIds: ['send_revolut_payment', 'verify_revolut_paymennt', 'receive_usdc'],
@@ -22,7 +28,7 @@ export default function ProcessBuyOrder() {
       'verify_revolut_paymennt': {
         stepIdx: 1,
         label: 'Verify Revolut transfer',
-        description: <>Jomo Co-pilot add-on is required to verify Revolut transfers. <Link>Install now</Link></>,
+        description: <Typography variant="body1">Jomo Co-pilot add-on is required to verify Revolut transfers. <Link color={"#000"} target="_blank" href={`https://chrome.google.com/webstore/detail/${extensionName}/${extensionId}`}>Install now</Link></Typography>,
       },
       'receive_usdc': {
         stepIdx: 2,
@@ -44,11 +50,7 @@ export default function ProcessBuyOrder() {
   const renderStepContent = function (step, setActiveStep) {
     const description = STEPS.stepDetails[step].description
 
-    return (
-      <>
-        <Typography variant="body1">{description}</Typography>
-      </>
-    )
+    return description
   }
 
   const renderResetContent = function (step) {
@@ -105,18 +107,127 @@ export default function ProcessBuyOrder() {
       <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "lightgrey", padding: 2, borderRadius: "16px 16px 0 0" }}>
         <Typography variant="h3" sx={{ marginTop: 2 }}>Add Jomo Copilot</Typography>
         <Typography textAlign={"center"} sx={{ marginY: 2 }}>
-          Jomo Copilot on Firefox is required to verify peer-to-peer transfers on apps like Revolut
+          Jomo Copilot on Firefox is required to verify pe er-to-peer transfers on apps like Revolut
           and Venmo to then send you crypto on-chain. Jomo uses cryptography so that your user data is not read or stored any where.
         </Typography>
-        <Button variant="contained" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 6 }}>
+        <Button variant="contained" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 6 }} onClick={() => {
+          window.open(`https://chrome.google.com/webstore/detail/${extensionName}/${extensionId}`, '_blank');
+          setBottomSheet("extensionAdded")
+        }}>
           Add Jomo Copilot on Firefox
         </Button>
       </Stack>
     )
   }
 
+  function JomoCopilotAddedBottomsheet() {
+    return (
+      <>
+        {bottomSheet === "extensionAdded" &&
+          <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "lightgrey", padding: 2, borderRadius: "16px 16px 0 0" }}>
+            <Typography variant="h3" sx={{ marginTop: 2 }}>Jomo Copilot Added!</Typography>
+            <Iconify height={36} width={36} color={"success.main"} icon="material-symbols:check" />
+            <Button variant="contained" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 6 }} onClick={() => { setBottomSheet("") }}>
+              Continue
+            </Button>
+          </Stack>
+        }
+      </>
+    )
+  }
+
+  function VerifyingBottomsheet() {
+    return (
+      <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "lightgrey", padding: 2, borderRadius: "16px 16px 0 0" }}>
+        <Typography variant="h3" sx={{ marginTop: 2 }}>Verifiying...</Typography>
+        <CircularProgress size={24} color="primary" />
+        <Typography textAlign={"center"} sx={{ marginY: 2 }}>
+          Hold on to your potatoes! This should only take less than a minute...
+        </Typography>
+      </Stack>
+    )
+  }
+
+  function VerifiedBottomsheet() {
+    return (
+      <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "lightgrey", padding: 2, borderRadius: "16px 16px 0 0" }}>
+        <Typography variant="h3" sx={{ marginTop: 2 }}>Verification complete!</Typography>
+        <Iconify height={36} width={36} color={"success.main"} icon="material-symbols:check" />
+        <Typography textAlign={"center"} sx={{ marginY: 2 }}>
+          We verified that you've completed a transfer of ${activeOrder?.amount + activeOrder?.fee} to @{activeOrder?.recipient_id} on Revolut
+        </Typography>
+        <Button variant="contained" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 6 }}>
+          Done
+        </Button>
+      </Stack>
+    )
+  }
+
+  function childExtensionNotFound() {
+    return (
+      <Button variant="contained" sx={{ borderRadius: 6, marginTop: 4 }} onClick={() => { setBottomSheet("addExtension") }}>
+        Verify with Jomo-Copilot
+      </Button>
+    )
+  }
+
+  function childExtensionInstalled() {
+    return JomoCopilotAddedBottomsheet()
+  }
+
+  function childExtensionFound() {
+    return (
+      <Button variant="contained" sx={{ borderRadius: 6, marginTop: 4 }}>
+        Sign-in to Revolut to verify
+      </Button>
+    )
+  }
+
+  function childVerificationInProgress() {
+    return VerifyingBottomsheet()
+  }
+
+  function childVerificationComplete() {
+    return VerifiedBottomsheet()
+  }
+
+  function childVerificationFail() {
+    return (
+      <Typography variant="body1">Failed to fetch data</Typography>
+    )
+  }
+
+  const buildAuthHeaders = function (response) {
+    const cookie = response.headers["Cookie"]
+    const deviceId = response.headers["x-device-id"]
+    const userAgent = response.headers["User-Agent"]
+
+    const authedHeader = new Map([
+      ["Cookie", cookie],
+      ["X-Device-Id", deviceId],
+      ["User-Agent", userAgent],
+      ["Host", revolutServer],
+    ])
+    return authedHeader
+  }
+
+  const buildDataPathWithResponse = function (response) {
+    const account = response["pockets"][0]["id"] || null
+    if (!account) {
+      return null
+    }
+    const dataPath = `api/retail/user/current/transactions/last?count=1&internalPocketId=${account}`
+    return dataPath
+  }
+
+  const onNotarizationResult = async function (res) {
+    console.log(res)
+  }
+
   useEffect(() => {
-    setActiveOrder(JSON.parse(localStorage.getItem('active_onramp_order')))
+    if (!activeOrder) {
+      setActiveOrder(JSON.parse(localStorage.getItem('active_onramp_order')))
+    }
   }, [setActiveOrder])
 
   return (
@@ -144,9 +255,38 @@ export default function ProcessBuyOrder() {
         </Button>
       }
       {activeStep === 1 &&
-        <Button variant="contained" sx={{ borderRadius: 6, marginTop: 4 }} onClick={() => { setBottomSheet("addExtension") }}>
-          Verify with Jomo-Copilot
-        </Button>
+        <JomoTlsnNotary
+          notaryServers={{
+            notaryServerHost: "127.0.0.1:7047",
+            notaryServerSsl: false,
+            websockifyServer: "ws://127.0.0.1:61289",
+          }}
+          // extensionId="c4c27de5-8322-4044-a30f-af2ec4f7b6fb"
+          // extensionName="deramp-mobile"
+          extensionConfigs={{
+            redirectUrl: "https://app.revolut.com/home",
+            urlFilters: ["https://app.revolut.com/api/retail/user/current/wallet"],
+          }}
+          applicationConfigs={{
+            appServer: revolutServer,
+          }}
+          onNotarizationResult={onNotarizationResult}
+          defaultNotaryFlowConfigs={{
+            defaultNotaryFlow: true,
+            buildAuthHeaders: buildAuthHeaders,
+            queryPath: "api/retail/user/current/wallet",
+            queryMethod: "GET",
+            buildDataPathWithResponse: buildDataPathWithResponse,
+            dataMethod: "GET",
+            keysToNotarize: [["account"], ["amount"], ["category"], ["comment"], ["completeDate"], ["id"], ["state"], ["recipient", "id"], ["recipient", "code"], ["currency"]],
+          }}
+          childExtensionNotFound={childExtensionNotFound()}
+          childExtensionInstalled={childExtensionInstalled()}
+          childExtensionFound={childExtensionFound()}
+          childVerificationInProgress={childVerificationInProgress()}
+          childVerificationComplete={childVerificationComplete()}
+          childVerificationFail={childVerificationFail()}
+        />
       }
 
       {bottomSheet === "pendingSendFiat" && <SendWithRevolutBottomsheet />}

@@ -5,6 +5,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
+    "@iconify/react": "^4.1.0",
     "@mui/base": "^5.0.0-beta.33",
     "@mui/material": "^5.15.6",
     "@privy-io/react-auth": "^1.52.5",
@@ -12,7 +13,9 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@zerodev/privy": "^1.4.4",
+    "comlink": "^4.4.1",
     "dotenv": "^16.3.1",
+    "jomo-tlsn-sdk": "^1.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.21.1",
