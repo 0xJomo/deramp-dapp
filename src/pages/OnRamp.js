@@ -6,7 +6,7 @@ import { useTheme } from '@mui/material/styles';
 
 export default function OnRamp() {
   const { setAmount } = useUserContext()
-  const [text, setText] = useState(null);
+  const [text, setText] = useState("");
   const navigate = useNavigate();
   const theme = useTheme()
 

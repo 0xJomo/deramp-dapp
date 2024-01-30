@@ -1,10 +1,12 @@
 import OrderDisplay from "./OrderDisplay.js"
 import { useUserContext } from '../context/UserContext.tsx';
 import { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import { Typography, Stack, Button, Link, CircularProgress } from '@mui/material';
 import VerticalLinearStepper from "../components/stepper/VerticalLinearStepper.tsx";
 import Iconify from '../components/iconify/Iconify.tsx';
 import { JomoTlsnNotary } from 'jomo-tlsn-sdk/dist';
+import * as apis from '../utils/apirequests'
 
 export default function ProcessBuyOrder() {
 
@@ -12,6 +14,8 @@ export default function ProcessBuyOrder() {
   // reviewOrder, pendingSendFiat, pendingVerifyTransfer, addCopilot, pendingVerifyWithCopilot, verifying, verified, received
   const [bottomSheet, setBottomSheet] = useState("")
   const [activeStep, setActiveStep] = useState(0);
+
+  const navigate = useNavigate();
 
   const revolutServer = "app.revolut.com"
   const extensionId = "nmdnfckjjghlbjeodefnapacfnocpdgm"
@@ -167,6 +171,36 @@ export default function ProcessBuyOrder() {
     )
   }
 
+  function SendingCryptoBottomsheet() {
+    return (
+      <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "lightgrey", padding: 2, borderRadius: "16px 16px 0 0" }}>
+        <Typography variant="h3" sx={{ marginTop: 2 }}>Transaction Pending</Typography>
+        <CircularProgress size={24} color="primary" />
+        <Typography textAlign={"center"} sx={{ marginY: 2 }}>
+          Your transaction is pending, ou will receive ${activeOrder?.amount} of USDC on DeRamp shortly. Typically this can take up to a minute.
+        </Typography>
+        <Button variant="contained" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 6 }} onClick={() => { setBottomSheet("") }}>
+          Done
+        </Button>
+      </Stack>
+    )
+  }
+
+  function SentCryptoBottomsheet() {
+    return (
+      <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "lightgrey", padding: 2, borderRadius: "16px 16px 0 0" }}>
+        <Typography variant="h3" sx={{ marginTop: 2 }}>You got crypto!</Typography>
+        <Iconify height={36} width={36} color={"success.main"} icon="material-symbols:check" />
+        <Typography textAlign={"center"} sx={{ marginY: 2 }}>
+          You received ${activeOrder?.amount} of USDC.
+        </Typography>
+        <Button variant="contained" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 6 }} onClick={() => { navigate("/profile") }}>
+          View Balance
+        </Button>
+      </Stack>
+    )
+  }
+
   function childExtensionNotFound() {
     return (
       <Button variant="contained" sx={{ borderRadius: 6, marginTop: 4 }} onClick={() => { setBottomSheet("addExtension") }}>
@@ -227,6 +261,20 @@ export default function ProcessBuyOrder() {
   const onNotarizationResult = async function (res) {
     console.log(res)
     console.log("send proof to backend to initiate transfer")
+    const verifyResponse = await apis.backendRequest('orders/buy/verify', {
+      buy_order_id: activeOrder.order_id,
+      session_proof: res.session_proof,
+      substrings_proof: res.substrings_proof,
+      body_start: res.body_start,
+    })
+    console.log(verifyResponse)
+    console.log("Check transaction status")
+    setTimeout(onTransactionComplete, 5000)
+  }
+
+  const onTransactionComplete = async function () {
+    console.log("transaction complete")
+    setBottomSheet("cryptoTransferComplete")
   }
 
   useEffect(() => {
@@ -293,10 +341,17 @@ export default function ProcessBuyOrder() {
           childVerificationFail={childVerificationFail()}
         />
       }
+      {activeStep === 2 &&
+        <Button variant="contained" sx={{ borderRadius: 6, marginTop: 4 }} onClick={() => setBottomSheet("pendingSendCrypto")}>
+          Transaction Pending
+        </Button>
+      }
 
       {bottomSheet === "pendingSendFiat" && <SendWithRevolutBottomsheet />}
       {bottomSheet === "confirmingTransfer" && <ConfirmTransferBottomsheet />}
       {bottomSheet === "addExtension" && <AddJomoCopilotBottomsheet />}
+      {bottomSheet === "pendingSendCrypto" && <SendingCryptoBottomsheet />}
+      {bottomSheet === "cryptoTransferComplete" && <SentCryptoBottomsheet />}
     </Stack >
   )
 }
