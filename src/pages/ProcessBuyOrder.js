@@ -150,16 +150,20 @@ export default function ProcessBuyOrder() {
 
   function VerifiedBottomsheet() {
     return (
-      <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "lightgrey", padding: 2, borderRadius: "16px 16px 0 0" }}>
-        <Typography variant="h3" sx={{ marginTop: 2 }}>Verification complete!</Typography>
-        <Iconify height={36} width={36} color={"success.main"} icon="material-symbols:check" />
-        <Typography textAlign={"center"} sx={{ marginY: 2 }}>
-          We verified that you've completed a transfer of ${activeOrder?.amount + activeOrder?.fee} to @{activeOrder?.recipient_id} on Revolut
-        </Typography>
-        <Button variant="contained" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 6 }}>
-          Done
-        </Button>
-      </Stack>
+      <>
+        {activeStep === 1 &&
+          <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "lightgrey", padding: 2, borderRadius: "16px 16px 0 0" }}>
+            <Typography variant="h3" sx={{ marginTop: 2 }}>Verification complete!</Typography>
+            <Iconify height={36} width={36} color={"success.main"} icon="material-symbols:check" />
+            <Typography textAlign={"center"} sx={{ marginY: 2 }}>
+              We verified that you've completed a transfer of ${activeOrder?.amount + activeOrder?.fee} to @{activeOrder?.recipient_id} on Revolut
+            </Typography>
+            <Button variant="contained" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 6 }} onClick={() => { setActiveStep(2) }}>
+              Done
+            </Button>
+          </Stack>
+        }
+      </>
     )
   }
 
@@ -222,6 +226,7 @@ export default function ProcessBuyOrder() {
 
   const onNotarizationResult = async function (res) {
     console.log(res)
+    console.log("send proof to backend to initiate transfer")
   }
 
   useEffect(() => {
