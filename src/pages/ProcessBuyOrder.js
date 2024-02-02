@@ -314,8 +314,6 @@ export default function ProcessBuyOrder() {
             notaryServerSsl: false,
             websockifyServer: "ws://127.0.0.1:61289",
           }}
-          // extensionId="c4c27de5-8322-4044-a30f-af2ec4f7b6fb"
-          // extensionName="deramp-mobile"
           extensionConfigs={{
             redirectUrl: "https://app.revolut.com/home",
             urlFilters: ["https://app.revolut.com/api/retail/user/current/wallet"],

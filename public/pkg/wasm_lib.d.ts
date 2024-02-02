@@ -25,43 +25,13 @@ export function requestViaWebsocket(server: string, path: string, method: string
 * @returns {Promise<string>}
 */
 export function notarizeRequest(server: string, path: string, method: string, data: string, headers: Map<any, any>, request_strings_to_notarize: Array<any>, response_strings_to_notarize: Array<any>, keys_to_notarize: Array<any>, notary_host: string, notary_ssl: boolean, client_websocket_url: string): Promise<string>;
-/**
-* @param {number} num_threads
-* @returns {Promise<any>}
-*/
-export function initThreadPool(num_threads: number): Promise<any>;
-/**
-* @param {number} receiver
-*/
-export function wbg_rayon_start_worker(receiver: number): void;
-/**
-*/
-export class wbg_rayon_PoolBuilder {
-  free(): void;
-/**
-* @returns {number}
-*/
-  numThreads(): number;
-/**
-* @returns {number}
-*/
-  receiver(): number;
-/**
-*/
-  build(): void;
-}
 
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
 
 export interface InitOutput {
+  readonly memory: WebAssembly.Memory;
   readonly requestViaWebsocket: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number, j: number, k: number) => number;
   readonly notarizeRequest: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number, j: number, k: number, l: number, m: number, n: number, o: number, p: number, q: number) => number;
-  readonly __wbg_wbg_rayon_poolbuilder_free: (a: number) => void;
-  readonly wbg_rayon_poolbuilder_numThreads: (a: number) => number;
-  readonly wbg_rayon_poolbuilder_receiver: (a: number) => number;
-  readonly wbg_rayon_poolbuilder_build: (a: number) => void;
-  readonly initThreadPool: (a: number) => number;
-  readonly wbg_rayon_start_worker: (a: number) => void;
   readonly OPENSSL_memcpy: (a: number, b: number, c: number) => number;
   readonly OPENSSL_memset: (a: number, b: number, c: number) => number;
   readonly p256_point_mul: (a: number, b: number, c: number, d: number) => void;
@@ -123,18 +93,15 @@ export interface InitOutput {
   readonly limbs_mul_add_limb: (a: number, b: number, c: number, d: number) => number;
   readonly p256_scalar_sqr_rep_mont: (a: number, b: number, c: number) => void;
   readonly __assert_fail: (a: number, b: number, c: number, d: number) => void;
-  readonly memory: WebAssembly.Memory;
   readonly __wbindgen_malloc: (a: number, b: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
-  readonly __wbindgen_export_3: WebAssembly.Table;
-  readonly wasm_bindgen__convert__closures__invoke0_mut__hdea0b6306f26476d: (a: number, b: number) => void;
-  readonly wasm_bindgen__convert__closures__invoke1_mut__h06caf1634e662bbc: (a: number, b: number, c: number) => void;
-  readonly wasm_bindgen__convert__closures__invoke1_mut__h23c6593e79eebaa1: (a: number, b: number, c: number) => void;
-  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h900df6a632acaa56: (a: number, b: number, c: number) => void;
+  readonly __wbindgen_export_2: WebAssembly.Table;
+  readonly wasm_bindgen__convert__closures__invoke0_mut__h78a78ec9401ff16e: (a: number, b: number) => void;
+  readonly wasm_bindgen__convert__closures__invoke1_mut__ha072ba7b3ec91907: (a: number, b: number, c: number) => void;
+  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h1ebb27490b0cd590: (a: number, b: number, c: number) => void;
+  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h40d2159652019f64: (a: number, b: number, c: number) => void;
   readonly __wbindgen_exn_store: (a: number) => void;
-  readonly wasm_bindgen__convert__closures__invoke2_mut__h237a82fa17f4ff08: (a: number, b: number, c: number, d: number) => void;
-  readonly __wbindgen_thread_destroy: (a?: number, b?: number) => void;
-  readonly __wbindgen_start: () => void;
+  readonly wasm_bindgen__convert__closures__invoke2_mut__h3285ab5a2923154f: (a: number, b: number, c: number, d: number) => void;
 }
 
 export type SyncInitInput = BufferSource | WebAssembly.Module;
@@ -143,19 +110,17 @@ export type SyncInitInput = BufferSource | WebAssembly.Module;
 * a precompiled `WebAssembly.Module`.
 *
 * @param {SyncInitInput} module
-* @param {WebAssembly.Memory} maybe_memory
 *
 * @returns {InitOutput}
 */
-export function initSync(module: SyncInitInput, maybe_memory?: WebAssembly.Memory): InitOutput;
+export function initSync(module: SyncInitInput): InitOutput;
 
 /**
 * If `module_or_path` is {RequestInfo} or {URL}, makes a request and
 * for everything else, calls `WebAssembly.instantiate` directly.
 *
 * @param {InitInput | Promise<InitInput>} module_or_path
-* @param {WebAssembly.Memory} maybe_memory
 *
 * @returns {Promise<InitOutput>}
 */
-export default function __wbg_init (module_or_path?: InitInput | Promise<InitInput>, maybe_memory?: WebAssembly.Memory): Promise<InitOutput>;
+export default function __wbg_init (module_or_path?: InitInput | Promise<InitInput>): Promise<InitOutput>;

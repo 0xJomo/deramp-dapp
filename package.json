@@ -8,11 +8,11 @@
     "@iconify/react": "^4.1.0",
     "@mui/base": "^5.0.0-beta.33",
     "@mui/material": "^5.15.6",
-    "@privy-io/react-auth": "^1.52.5",
+    "@privy-io/react-auth": "^1.34.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-    "@zerodev/privy": "^1.4.4",
+    "@zerodev/privy": "^1.0.2",
     "comlink": "^4.4.1",
     "dotenv": "^16.3.1",
     "jomo-tlsn-sdk": "^1.0.3",
@@ -27,9 +27,9 @@
     "typescript": "5.0.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
     "eject": "react-scripts eject"
   },
   "browserslist": {
@@ -45,8 +45,14 @@
     ]
   },
   "devDependencies": {
+    "assert": "^2.1.0",
     "autoprefixer": "^10.4.16",
+    "buffer": "^6.0.3",
     "postcss": "^8.4.32",
-    "tailwindcss": "^3.4.0"
+    "process": "^0.11.10",
+    "react-app-rewired": "^2.2.1",
+    "stream-browserify": "^3.0.0",
+    "tailwindcss": "^3.4.0",
+    "url": "^0.11.3"
   }
 }

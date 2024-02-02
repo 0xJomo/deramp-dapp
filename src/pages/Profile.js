@@ -1,10 +1,24 @@
+import { useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { usePrivySmartAccount } from '@zerodev/privy';
 import { Typography, Stack, Button } from '@mui/material';
 
 export default function Profile() {
-  const { login, logout, ready, authenticated, user, zeroDevReady, sendTransaction } = usePrivySmartAccount();
+  const { ready, authenticated, zeroDevReady, getAccessToken, getEthereumProvider } = usePrivySmartAccount();
   const navigate = useNavigate();
+  const isFirstMount = useRef(true)
+
+  useEffect(() => {
+    if (ready && authenticated && zeroDevReady) {
+      if (isFirstMount.current) {
+        isFirstMount.current = false
+        getAccessToken().then((token) => {
+          localStorage.setItem("access_token", token)
+        })
+        getEthereumProvider().getAddress().then((address) => console.log(address))
+      }
+    }
+  }, [ready, authenticated, zeroDevReady])
 
   return (
     <Stack justifyContent="flex-start" alignItems="center" sx={{ minHeight: "100vh", paddingX: 3 }}>

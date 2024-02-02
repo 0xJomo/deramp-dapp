@@ -11,9 +11,15 @@ export default function ReviewOrder() {
   const { amount, setActiveOrder } = useUserContext()
 
   const lockOrder = async function (amount) {
-    const lockResponse = await apis.backendRequest('orders/buy/create', {
-      buy_amount: parseFloat(amount)
-    })
+    const lockResponse = await apis.backendRequest(
+      'orders/buy/create',
+      {
+        buy_amount: parseFloat(amount)
+      },
+      {
+        Authorization: "Bearer " + localStorage.getItem("access_token")
+      },
+    )
 
     console.log(lockResponse)
     if (lockResponse.buy_order_id) {

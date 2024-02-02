@@ -1,4 +1,4 @@
-export async function backendRequest(url = '', data = {}) {
+export async function backendRequest(url = '', data = {}, extraHeaders = {}) {
   // Default options are marked with *
   const responseJson = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/` + url, {
     method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -6,7 +6,8 @@ export async function backendRequest(url = '', data = {}) {
     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
     // credentials: 'same-origin', // include, *same-origin, omit
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      ...extraHeaders,
     },
     redirect: 'follow', // manual, *follow, error
     referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
@@ -24,13 +25,14 @@ export async function backendRequest(url = '', data = {}) {
   return responseJson
 }
 
-export async function postUrl(url = '', data = {}) {
+export async function postUrl(url = '', data = {}, extraHeaders = {}) {
   // Default options are marked with *
   const responseJson = await fetch(url, {
     method: 'POST', // *GET, POST, PUT, DELETE, etc.
     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      ...extraHeaders,
     },
     redirect: 'follow', // manual, *follow, error
     referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url

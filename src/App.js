@@ -40,8 +40,8 @@ function App() {
           config={{
             embeddedWallets: {
               createOnLogin: 'users-without-wallets',
-              noPromptOnSignature: true
-            }
+              noPromptOnSignature: true,
+            },
           }}
         >
           <BrowserRouter>
