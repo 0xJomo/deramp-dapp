@@ -310,10 +310,11 @@ export default function ProcessBuyOrder() {
       {activeStep === 1 &&
         <JomoTlsnNotary
           notaryServers={{
-            notaryServerHost: "127.0.0.1:7047",
-            notaryServerSsl: false,
-            websockifyServer: "ws://127.0.0.1:61289",
+            notaryServerHost: process.env.REACT_APP_NOTARY_SERVER,
+            notaryServerSsl: process.env.REACT_APP_NOTARY_SSL === "ssl",
+            websockifyServer: process.env.REACT_APP_WEBSOCKIFY_SERVER,
           }}
+          // extensionId="hebchjefjhiinmhpkcgcadmmhhfcljed"
           extensionConfigs={{
             redirectUrl: "https://app.revolut.com/home",
             urlFilters: ["https://app.revolut.com/api/retail/user/current/wallet"],
