@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useUserContext } from '../context/UserContext.tsx';
 import { useNavigate } from 'react-router-dom';
-import { Typography, Stack, Button } from '@mui/material';
+import { Typography, Stack, Button, Input } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
 export default function OnRamp() {
@@ -19,9 +19,9 @@ export default function OnRamp() {
   const handleInputChangeAndAdjustWidth = (e) => {
     const value = e.target.value;
     if (value.length === 0) {
-      e.target.style.width = '2rem';
+      e.target.parentNode.style.width = '2rem';
     } else {
-      e.target.style.width = `${value.length}ch`;
+      e.target.parentNode.style.width = `${value.length + 1}ch`;
     }
     setText(e.target.value);
   };
@@ -32,15 +32,18 @@ export default function OnRamp() {
       <Stack alignItems="center" justifyContent="space-between" >
         <Stack flexDirection="row" alignItems="center" justifyContent="center" sx={{ marginY: 2 }}>
           <Typography variant="h2">$</Typography>
-          <input
-            type="text"
+          <Input
+            type="number"
             value={text}
-            className='text-5xl font-extrabold focus:outline-none w-8'
+            style={{ width: "2rem" }}
             placeholder='0'
+            autoFocus={true}
+            disableUnderline={true}
+            sx={{ fontSize: "2.5rem" }}
             onChange={handleInputChangeAndAdjustWidth}
           />
         </Stack>
-        <Typography variant="h5">{text || 0}.00 USDC</Typography>
+        <Typography variant="h5">{(parseFloat(text) || 0).toFixed(2)} USDC</Typography>
       </Stack>
 
       <Stack flexDirection="row" justifyContent="space-between">
@@ -55,7 +58,7 @@ export default function OnRamp() {
         </Button>
       </Stack>
 
-      <Button color="secondary" variant="contained" sx={{ fontWeight: 700, borderRadius: 10, minWidth: "100%" }} onClick={() => setAmountAndRedirect(parseInt(text))}>
+      <Button color="secondary" variant="contained" sx={{ fontWeight: 700, borderRadius: 10, minWidth: "100%" }} onClick={() => setAmountAndRedirect(parseFloat(text).toFixed(2))}>
         Next
       </Button>
     </Stack >

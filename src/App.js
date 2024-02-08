@@ -15,6 +15,7 @@ import palette from './theme/palette.ts';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import * as buffer from "buffer";
+import Logout from './pages/Logout';
 window.Buffer = buffer.Buffer;
 
 function App() {
@@ -53,6 +54,7 @@ function App() {
                 <Route path='/payment' element={<Payment />} />
                 <Route path='/review' element={<ReviewOrder />} />
                 <Route path='/buy' element={<ProcessBuyOrder />} />
+                <Route path='/logout' element={<Logout />} />
               </Routes>
             </UserContext.Provider>
           </BrowserRouter>
