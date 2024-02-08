@@ -195,7 +195,7 @@ export default function ProcessBuyOrder() {
         <Typography textAlign={"center"} sx={{ marginY: 2 }}>
           You received ${activeOrder?.amount} of USDC.
         </Typography>
-        <Button variant="contained" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 6 }} onClick={() => { navigate("/profile") }}>
+        <Button variant="contained" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 6 }} onClick={() => { window.location.href = "/profile" }}>
           View Balance
         </Button>
       </Stack>
