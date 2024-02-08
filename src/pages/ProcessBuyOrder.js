@@ -7,6 +7,7 @@ import VerticalLinearStepper from "../components/stepper/VerticalLinearStepper.t
 import Iconify from '../components/iconify/Iconify.tsx';
 import { JomoTlsnNotary } from 'jomo-tlsn-sdk/dist';
 import * as apis from '../utils/apirequests'
+import QRCode from "react-qr-code";
 
 export default function ProcessBuyOrder() {
 
@@ -82,7 +83,7 @@ export default function ProcessBuyOrder() {
           I have completed my transfer
         </Button>
         <Button variant="text" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 6 }} onClick={() => setBottomSheet("pendingSendFiat")}>
-          Return to Revolut to complete my transfer
+          Return to make the transfer
         </Button>
       </Stack>
     )
@@ -100,8 +101,12 @@ export default function ProcessBuyOrder() {
         <Typography textAlign={"center"} sx={{ marginY: 2 }}>Please complete your transfer of exactly ${activeOrder?.amount + activeOrder?.fee} on Revolut to @{activeOrder?.recipient_id}, then verify the transaction on DeRamp.
           Transferring more than ${activeOrder?.amount + activeOrder?.fee} could result in a loss of funds.
         </Typography>
-        <Button variant="contained" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 6 }} onClick={() => redirectToRevolutPayment(activeOrder)}>
+        <QRCode value={`https://revolut.me/${activeOrder.recipient_id}`} />
+        <Button variant="contained" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 2 }} onClick={() => redirectToRevolutPayment(activeOrder)}>
           Go to Revolut
+        </Button>
+        <Button variant="text" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 6 }} onClick={() => setBottomSheet("confirmingTransfer")}>
+          I have completed the transfer in Revolut app
         </Button>
       </Stack>
     )
