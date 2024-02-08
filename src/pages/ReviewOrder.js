@@ -30,7 +30,7 @@ export default function ReviewOrder() {
   }
 
   const lockOrder = async function (amount) {
-    const lockResponse = await apis.backendRequest(
+    const [requestStatus, lockResponse] = await apis.backendRequest(
       'orders/buy/create',
       {
         buy_amount: parseFloat(amount)
@@ -40,8 +40,12 @@ export default function ReviewOrder() {
       },
     )
 
+    if (requestStatus === 401) {
+      navigate('/logout')
+      return
+    }
     console.log(lockResponse)
-    if (lockResponse.buy_order_id) {
+    if (lockResponse && lockResponse.buy_order_id) {
       // TODO: extract info from response
       const order_id = lockResponse.buy_order_id
       const p2p_platform = "revolut"

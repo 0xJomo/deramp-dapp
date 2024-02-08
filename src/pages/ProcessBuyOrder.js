@@ -14,6 +14,7 @@ export default function ProcessBuyOrder() {
   const [bottomSheet, setBottomSheet] = useState("")
   const [activeStep, setActiveStep] = useState(0);
   const accessToken = useRef(null)
+  const isFirstMount = useRef(true)
 
   const navigate = useNavigate();
 
@@ -261,16 +262,26 @@ export default function ProcessBuyOrder() {
   const onNotarizationResult = async function (res) {
     console.log(res)
     console.log("send proof to backend to initiate transfer")
-    const verifyResponse = await apis.backendRequest('orders/buy/verify', {
-      buy_order_id: activeOrder.order_id,
-      session_proof: res.session_proof,
-      substrings_proof: res.substrings_proof,
-      body_start: res.body_start,
-      receiver_address: localStorage.getItem("wallet_address"),
-      amount: activeOrder.amount,
-      fee: activeOrder.fee,
-    })
-    console.log(verifyResponse)
+    const [requestStatus, verifyResponse] = await apis.backendRequest(
+      'orders/buy/verify',
+      {
+        buy_order_id: activeOrder.order_id,
+        session_proof: res.session_proof,
+        substrings_proof: res.substrings_proof,
+        body_start: res.body_start,
+        receiver_address: localStorage.getItem("wallet_address"),
+        amount: activeOrder.amount,
+        fee: activeOrder.fee,
+      },
+      {
+        Authorization: "Bearer " + accessToken.current
+      },
+    )
+    console.log(requestStatus, verifyResponse)
+    if (requestStatus === 401) {
+      navigate('/logout')
+      return
+    }
     if (verifyResponse.success) {
       const newActiveOrder = {
         completed: true,
@@ -290,17 +301,41 @@ export default function ProcessBuyOrder() {
 
   useEffect(() => {
     if (!activeOrder) {
-      setActiveOrder(JSON.parse(localStorage.getItem('active_onramp_order')))
+      const storedOrder = JSON.parse(localStorage.getItem('active_onramp_order'))
+      if (storedOrder.completed) {
+        navigate('/onramp')
+        return
+      }
+      setActiveOrder(storedOrder)
+    } else if (activeOrder.completed) {
+      navigate('/onramp')
     }
   }, [setActiveOrder])
 
   useEffect(() => {
-    const storedAccessToken = localStorage.getItem("access_token")
-    if (!storedAccessToken) {
-      navigate('/logout')
-      return
+    if (isFirstMount.current) {
+      isFirstMount.current = false
+
+      const storedAccessToken = localStorage.getItem("access_token")
+      if (!storedAccessToken) {
+        navigate('/logout')
+        return
+      }
+      accessToken.current = storedAccessToken
+
+      apis.backendRequest(
+        'auth/check',
+        {},
+        {
+          Authorization: "Bearer " + accessToken.current
+        },
+      ).then((requestStatus, _) => {
+        if (requestStatus === 401) {
+          navigate('/logout')
+          return
+        }
+      })
     }
-    accessToken.current = storedAccessToken
   }, [])
 
   return (

@@ -14,13 +14,13 @@ export async function backendRequest(url = '', data = {}, extraHeaders = {}) {
     body: JSON.stringify(data) // body data type must match "Content-Type" header
   }).then((response) => {
     if (response.status === 200) {
-      return response.json(); // parses JSON response into native JavaScript objects
+      return Promise.all([200, response.json()]); // parses JSON response into native JavaScript objects
     } else {
-      return null  // return null for failed requests
+      return [response.status, null]  // return null for failed requests
     }
   }).catch((error) => {
     console.log(error)
-    return null
+    return [0, error]
   })
   return responseJson
 }

@@ -11,6 +11,7 @@ export default function OnRamp() {
   const theme = useTheme()
 
   const setAmountAndRedirect = (value) => {
+    if (!value || value === 0.0) return
     setAmount(parseFloat(value));
     localStorage.setItem("onramp_amount", value)
     navigate("/payment")
@@ -58,7 +59,7 @@ export default function OnRamp() {
         </Button>
       </Stack>
 
-      <Button color="secondary" variant="contained" sx={{ fontWeight: 700, borderRadius: 10, minWidth: "100%" }} onClick={() => setAmountAndRedirect(parseFloat(text).toFixed(2))}>
+      <Button color="secondary" variant="contained" sx={{ fontWeight: 700, borderRadius: 10, minWidth: "100%" }} onClick={() => setAmountAndRedirect(parseFloat(text))}>
         Next
       </Button>
     </Stack >
