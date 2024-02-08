@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { usePrivySmartAccount } from '@zerodev/privy';
 import { Typography, Stack, Button } from '@mui/material';
@@ -8,6 +9,12 @@ export default function Home() {
   const { logout, ready, authenticated, zeroDevReady } = usePrivySmartAccount();
   const { login } = usePrivy();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (ready && authenticated && zeroDevReady) {
+      navigate('/profile')
+    }
+  }, [ready, authenticated, zeroDevReady])
 
   return (
     <Stack alignItems={"center"} justifyContent={"space-evenly"} sx={{ minHeight: "100vh", paddingX: 3 }}>

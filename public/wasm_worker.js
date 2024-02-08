@@ -51,7 +51,7 @@ class Notarizer {
   }
 
   async sendRequest(server, path, method, data, headers, websockifyServer) {
-    const wasmPkg = await import('./pkg/wasm_lib.js');
+    const wasmPkg = await import('./pkg-mt/wasm_lib.js');
     await wasmPkg.default();
 
     const response = await wasmPkg.requestViaWebsocket(

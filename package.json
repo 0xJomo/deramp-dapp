@@ -15,6 +15,7 @@
     "@zerodev/privy": "^1.0.2",
     "comlink": "^4.4.1",
     "dotenv": "^16.3.1",
+    "ethers": "^6.10.0",
     "jomo-tlsn-sdk": "^1.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
