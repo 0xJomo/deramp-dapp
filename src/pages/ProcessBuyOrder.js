@@ -279,7 +279,7 @@ export default function ProcessBuyOrder() {
     )
     console.log(requestStatus, verifyResponse)
     if (requestStatus === 401) {
-      navigate('/logout')
+      window.location.href = '/logout'
       return
     }
     if (verifyResponse.success) {
