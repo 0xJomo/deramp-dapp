@@ -43,17 +43,19 @@ export default function Profile() {
 
   useEffect(() => {
     if (ready && authenticated && zeroDevReady) {
+      getAccessToken().then((token) => {
+        localStorage.setItem("access_token", token)
+      })
+
       if (isFirstMount.current) {
         isFirstMount.current = false
-        getAccessToken().then((token) => {
-          localStorage.setItem("access_token", token)
-        })
         getEthereumProvider().getAddress().then((address) => {
           localStorage.setItem("wallet_address", address)
           walletAddress.current = address
           const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
           const erc20 = new ethers.Contract(usdcAddress, usdcAbi, provider);
           erc20.balanceOf(address).then((amount) => {
+            console.log("balance", parseFloat(amount) / 1e18)
             setBalance(parseFloat(amount) / 1e18)
           })
         })

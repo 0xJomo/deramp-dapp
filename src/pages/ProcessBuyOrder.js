@@ -1,6 +1,6 @@
 import OrderDisplay from "./OrderDisplay.js"
 import { useUserContext } from '../context/UserContext.tsx';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from 'react-router-dom';
 import { Typography, Stack, Button, Link, CircularProgress } from '@mui/material';
 import VerticalLinearStepper from "../components/stepper/VerticalLinearStepper.tsx";
@@ -13,6 +13,7 @@ export default function ProcessBuyOrder() {
   const { activeOrder, setActiveOrder } = useUserContext()
   const [bottomSheet, setBottomSheet] = useState("")
   const [activeStep, setActiveStep] = useState(0);
+  const accessToken = useRef(null)
 
   const navigate = useNavigate();
 
@@ -265,8 +266,19 @@ export default function ProcessBuyOrder() {
       session_proof: res.session_proof,
       substrings_proof: res.substrings_proof,
       body_start: res.body_start,
+      receiver_address: localStorage.getItem("wallet_address"),
+      amount: activeOrder.amount,
+      fee: activeOrder.fee,
     })
     console.log(verifyResponse)
+    if (verifyResponse.success) {
+      const newActiveOrder = {
+        completed: true,
+        ...activeOrder,
+      }
+      setActiveOrder(newActiveOrder)
+      localStorage.setItem("active_onramp_order", JSON.stringify(newActiveOrder))
+    }
     console.log("Check transaction status")
     setTimeout(onTransactionComplete, 5000)
   }
@@ -281,6 +293,15 @@ export default function ProcessBuyOrder() {
       setActiveOrder(JSON.parse(localStorage.getItem('active_onramp_order')))
     }
   }, [setActiveOrder])
+
+  useEffect(() => {
+    const storedAccessToken = localStorage.getItem("access_token")
+    if (!storedAccessToken) {
+      navigate('/logout')
+      return
+    }
+    accessToken.current = storedAccessToken
+  }, [])
 
   return (
     <Stack sx={{ minHeight: "100vh", marginX: 2, marginY: 4, padding: 1 }}>

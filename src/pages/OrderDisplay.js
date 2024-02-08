@@ -8,6 +8,8 @@ export default function OrderDisplay({ useGrayBackground = false }) {
   const { amount, setAmount, platform, setPlatform } = useUserContext()
   const navigate = useNavigate();
 
+  const fee = 0.0
+
   const componentClass = `rounded-2xl p-4 ${useGrayBackground ? 'bg-gray-300' : 'bg-white'}`;
 
   useEffect(() => {
@@ -50,12 +52,12 @@ export default function OrderDisplay({ useGrayBackground = false }) {
 
       <Stack flexDirection="row" justifyContent="space-between" sx={{ marginTop: 4 }} >
         <Typography>Fee</Typography>
-        <Typography>$0.05</Typography>
+        <Typography>${fee.toFixed(2)}</Typography>
       </Stack>
 
       <Stack flexDirection="row" justifyContent="space-between" sx={{ marginTop: 4 }} >
         <Typography variant="subtitle1">Total cost</Typography>
-        <Typography>${parseFloat(amount) + 0.05}</Typography>
+        <Typography>${parseFloat(amount) + fee}</Typography>
       </Stack>
     </Stack>
   )

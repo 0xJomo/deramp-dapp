@@ -8,6 +8,7 @@ export default function Logout() {
 
   useEffect(() => {
     logout()
+    localStorage.removeItem("access_token")
     navigate('/profile')
   }, [])
 

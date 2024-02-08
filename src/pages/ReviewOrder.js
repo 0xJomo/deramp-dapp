@@ -11,17 +11,17 @@ export default function ReviewOrder() {
   const { amount, platform, activeOrder, setActiveOrder } = useUserContext()
 
   const processOrder = async function (amount, platform) {
-    if (activeOrder && activeOrder.amount === amount && activeOrder.p2p_platform === platform) {
-      navigate('/buy')
+    if (activeOrder && activeOrder.amount === amount && activeOrder.p2p_platform === platform && !activeOrder.completed) {
+      window.location.href = '/buy'
       return
     }
     const storedOrder = localStorage.getItem("active_onramp_order")
     if (storedOrder) {
       const decodedOrder = JSON.parse(storedOrder)
       console.log(decodedOrder, amount, platform)
-      if (decodedOrder.amount === amount && decodedOrder.p2p_platform === platform) {
+      if (decodedOrder.amount === amount && decodedOrder.p2p_platform === platform && !decodedOrder.completed) {
         setActiveOrder(decodedOrder)
-        navigate('/buy')
+        window.location.href = '/buy'
         return
       }
     }
@@ -46,7 +46,7 @@ export default function ReviewOrder() {
       const order_id = lockResponse.buy_order_id
       const p2p_platform = "revolut"
       const recipient_id = "yuchennlxy"
-      const fee = 0.05
+      const fee = 0
 
       const order = {
         amount: parseFloat(amount),
@@ -58,7 +58,7 @@ export default function ReviewOrder() {
       setActiveOrder(order)
       localStorage.setItem("active_onramp_order", JSON.stringify(order))
 
-      navigate("/buy")
+      window.location.href = '/buy'
     } else {
       // TODO: insert some error messages
     }
