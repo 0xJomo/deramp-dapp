@@ -18,13 +18,16 @@ export default function OnRamp() {
   }
 
   const handleInputChangeAndAdjustWidth = (e) => {
-    const value = e.target.value;
-    if (value.length === 0) {
-      e.target.parentNode.style.width = '2rem';
-    } else {
-      e.target.parentNode.style.width = `${value.length + 1}ch`;
+    var value = e.target.value;
+    if (value.startsWith("0")) value = ""
+    if (parseFloat(value) < 1) value = ""
+    if (value.startsWith("100")) value = "100"
+    if (parseFloat(value) > 100) value = "100"
+    const shortValue = parseFloat(value).toFixed(2)
+    if (shortValue.length - value.length < 0) {
+      value = value.substring(0, shortValue.length)
     }
-    setText(e.target.value);
+    setText(value);
   };
 
   return (
@@ -36,8 +39,8 @@ export default function OnRamp() {
           <Input
             type="number"
             value={text}
-            style={{ width: "2rem" }}
-            placeholder='0'
+            style={{ width: "6.5rem" }}
+            placeholder='0.00'
             autoFocus={true}
             disableUnderline={true}
             sx={{ fontSize: "2.5rem" }}
