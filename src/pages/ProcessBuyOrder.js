@@ -334,7 +334,8 @@ export default function ProcessBuyOrder() {
         {
           Authorization: "Bearer " + accessToken.current
         },
-      ).then((requestStatus, _) => {
+      ).then(([requestStatus, _]) => {
+        console.log(requestStatus)
         if (requestStatus === 401) {
           navigate('/logout')
           return
