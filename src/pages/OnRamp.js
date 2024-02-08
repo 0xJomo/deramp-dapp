@@ -11,7 +11,7 @@ export default function OnRamp() {
   const theme = useTheme()
 
   const setAmountAndRedirect = (value) => {
-    setAmount(value);
+    setAmount(parseFloat(value));
     localStorage.setItem("onramp_amount", value)
     navigate("/payment")
   }

@@ -5,6 +5,8 @@ export type UserContent = {
   setUser: (user: any) => void
   amount: number
   setAmount: (amount: number) => void
+  platform: string
+  setPlatform: (platform: string) => void
   activeOrder: any
   setActiveOrder: (activeOrder: any) => void
 }
@@ -15,6 +17,8 @@ export const UserContext = createContext<UserContent>({
   setUser: () => { },
   amount: 0,
   setAmount: () => { },
+  platform: "",
+  setPlatform: () => { },
   activeOrder: null,
   setActiveOrder: () => { },
 });

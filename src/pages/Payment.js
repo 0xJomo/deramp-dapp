@@ -1,9 +1,18 @@
 import { useNavigate } from 'react-router-dom';
 import { Typography, Stack, Button } from '@mui/material';
+import { useUserContext } from '../context/UserContext.tsx';
 
 export default function Payment() {
 
+  const { setPlatform } = useUserContext()
+
   const navigate = useNavigate();
+
+  const selectPayment = async function (paymentPlatform) {
+    setPlatform(paymentPlatform)
+    localStorage.setItem("onramp_platform", paymentPlatform)
+    navigate("/review")
+  }
 
   return (
     <Stack sx={{ minHeight: "100vh", marginX: 4, marginY: 8 }} alignItems={"flex-start"}>
@@ -11,7 +20,7 @@ export default function Payment() {
         Choose a peer-to-peer transfer method
       </Typography>
 
-      <Button sx={{ marginY: 2, borderRadius: 4, padding: 2, backgroundColor: "lightgrey" }} onClick={() => navigate("/review")}>
+      <Button sx={{ marginY: 2, borderRadius: 4, padding: 2, backgroundColor: "lightgrey" }} onClick={() => selectPayment("revolut")}>
         <Stack flexDirection={"row"} alignItems={"center"} >
           <img
             src="/images/revolut.png"

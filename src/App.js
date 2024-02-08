@@ -21,6 +21,7 @@ window.Buffer = buffer.Buffer;
 function App() {
   const [user, setUser] = useState(null);
   const [amount, setAmount] = useState(null);
+  const [platform, setPlatform] = useState("");
   const [activeOrder, setActiveOrder] = useState(null);
 
   const handleLogin = (user) => {
@@ -46,7 +47,7 @@ function App() {
           }}
         >
           <BrowserRouter>
-            <UserContext.Provider value={{ user, setUser, amount, setAmount, activeOrder, setActiveOrder }}>
+            <UserContext.Provider value={{ user, setUser, amount, setAmount, platform, setPlatform, activeOrder, setActiveOrder }}>
               <Routes>
                 <Route path='/' element={<Home />} />
                 <Route path='/profile' element={<Profile />} />

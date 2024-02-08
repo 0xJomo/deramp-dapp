@@ -1,16 +1,30 @@
 import { useUserContext } from '../context/UserContext.tsx';
+import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import { Typography, Stack, Button, Divider } from '@mui/material';
+import { Typography, Stack, Divider } from '@mui/material';
 
 export default function OrderDisplay({ useGrayBackground = false }) {
 
-  const { amount, setAmount } = useUserContext()
+  const { amount, setAmount, platform, setPlatform } = useUserContext()
+  const navigate = useNavigate();
 
   const componentClass = `rounded-2xl p-4 ${useGrayBackground ? 'bg-gray-300' : 'bg-white'}`;
 
   useEffect(() => {
-    setAmount(localStorage.getItem('onramp_amount'))
-  }, [setAmount])
+    const storedAmount = localStorage.getItem('onramp_amount')
+    const storedPlatform = localStorage.getItem('onramp_platform')
+    if (!storedAmount) {
+      navigate('/onramp')
+      return
+    }
+    if (!storedPlatform) {
+      navigate('/payment')
+      return
+    }
+
+    setAmount(parseFloat(storedAmount))
+    setPlatform(storedPlatform)
+  }, [setAmount, setPlatform])
 
   return (
     <Stack className={componentClass}>
@@ -19,7 +33,7 @@ export default function OrderDisplay({ useGrayBackground = false }) {
 
       <Stack flexDirection="row" justifyContent="space-between" sx={{ marginTop: 4 }} >
         <Typography>Transfer method</Typography>
-        <Typography>Revolut</Typography>
+        <Typography>{(platform === "revolut" && "Revolut") || null}</Typography>
       </Stack>
 
       <Stack flexDirection="row" justifyContent="space-between" sx={{ marginTop: 4 }} >
@@ -41,7 +55,7 @@ export default function OrderDisplay({ useGrayBackground = false }) {
 
       <Stack flexDirection="row" justifyContent="space-between" sx={{ marginTop: 4 }} >
         <Typography variant="subtitle1">Total cost</Typography>
-        <Typography>${parseInt(amount) + 0.05}</Typography>
+        <Typography>${parseFloat(amount) + 0.05}</Typography>
       </Stack>
     </Stack>
   )

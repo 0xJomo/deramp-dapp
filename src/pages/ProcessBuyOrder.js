@@ -11,7 +11,6 @@ import * as apis from '../utils/apirequests'
 export default function ProcessBuyOrder() {
 
   const { activeOrder, setActiveOrder } = useUserContext()
-  // reviewOrder, pendingSendFiat, pendingVerifyTransfer, addCopilot, pendingVerifyWithCopilot, verifying, verified, received
   const [bottomSheet, setBottomSheet] = useState("")
   const [activeStep, setActiveStep] = useState(0);
 
