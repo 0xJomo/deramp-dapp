@@ -23,7 +23,7 @@ export default function Profile() {
   const navigate = useNavigate();
   const isFirstMount = useRef(true)
 
-  const [balance, setBalance] = useState(0)
+  const [balance, setBalance] = useState(null)
   const walletAddress = useRef(null)
 
   const offRamp = async function (amount) {
@@ -52,7 +52,7 @@ export default function Profile() {
         getEthereumProvider().getAddress().then((address) => {
           localStorage.setItem("wallet_address", address)
           walletAddress.current = address
-          const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
+          const provider = new ethers.providers.JsonRpcProvider("https://jomonode.ngrok.dev");
           const erc20 = new ethers.Contract(usdcAddress, usdcAbi, provider);
           erc20.balanceOf(address).then((amount) => {
             console.log("balance", parseFloat(amount) / 1e18)
@@ -68,7 +68,7 @@ export default function Profile() {
 
   return (
     <Stack justifyContent="flex-start" alignItems="center" sx={{ minHeight: "100vh", paddingX: 3 }}>
-      <Typography variant="h2" sx={{ marginTop: 6, marginBottom: 2 }}>${balance.toFixed(2)}</Typography>
+      <Typography variant="h2" sx={{ marginTop: 6, marginBottom: 2 }}>${(balance !== null && balance.toFixed(2)) || "--.--"}</Typography>
 
       <Stack flexDirection="row">
         <Button color="secondary" variant="contained" sx={{ fontWeight: 700, borderRadius: 1.5, minWidth: 7, marginRight: 1 }} onClick={() => navigate("/onramp")}>
@@ -88,9 +88,9 @@ export default function Profile() {
         />
         <Stack flexGrow={1} sx={{ marginLeft: 1 }}>
           <Typography variant="h6">USDC</Typography >
-          <Typography>{balance.toFixed(2)} USDC</Typography>
+          <Typography>{(balance !== null && balance.toFixed(2)) || "--.--"} USDC</Typography>
         </Stack>
-        <Typography variant="h6">${balance.toFixed(2)}</Typography>
+        <Typography variant="h6">${(balance !== null && balance.toFixed(2)) || "--.--"}</Typography>
       </Stack>
     </Stack >
   );
