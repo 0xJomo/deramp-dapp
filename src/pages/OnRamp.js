@@ -28,14 +28,14 @@ export default function OnRamp() {
       value = value.substring(0, shortValue.length)
     }
     if (value.length === 0) {
-      e.target.parentNode.style.width = '4.8rem'
+      e.target.parentNode.style.width = '1.6rem'
     } else {
       var len = value.length * 1.6 + 0.5
       if (value.includes('.')) len -= 1.6
       e.target.parentNode.style.width = `${len}rem`
     }
     setText(value);
-  };
+  }
 
   return (
     <Stack alignItems="center" sx={{ paddingX: 1.5, minHeight: "100vh" }}>
@@ -50,10 +50,10 @@ export default function OnRamp() {
               type="number"
               value={text}
               style={{}}
-              placeholder='0.00'
+              placeholder='0'
               autoFocus={true}
               disableUnderline={true}
-              sx={{ fontSize: "2.5rem", width: "4.8rem" }}
+              sx={{ fontSize: "2.5rem", width: "1.6rem" }}
               onChange={handleInputChangeAndAdjustWidth}
             />
           </Stack>
