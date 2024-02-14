@@ -15,12 +15,14 @@ export default function Payment() {
   }
 
   return (
-    <Stack sx={{ minHeight: "100vh", marginX: 4, marginY: 8 }} alignItems={"flex-start"}>
-      <Typography variant="h6">
+    <Stack sx={{ minHeight: "100vh", marginX: 4 }} alignItems={"center"} gap={2}>
+      <Typography variant="subtitle2" mt={2} mb={2}>Payment method</Typography>
+
+      <Typography variant="h5">
         Choose a peer-to-peer transfer method
       </Typography>
 
-      <Button sx={{ marginY: 2, borderRadius: 4, padding: 2, backgroundColor: "lightgrey" }} onClick={() => selectPayment("revolut")}>
+      <Button sx={{ borderRadius: 4, padding: 2, backgroundColor: "lightgrey" }} onClick={() => selectPayment("revolut")}>
         <Stack flexDirection={"row"} alignItems={"center"} >
           <img
             src="/images/revolut.png"

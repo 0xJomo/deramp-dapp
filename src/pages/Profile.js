@@ -68,11 +68,11 @@ export default function Profile() {
   }, [ready, authenticated, zeroDevReady])
 
   return (
-    <Stack justifyContent="flex-start" alignItems="center" sx={{ minHeight: "100vh", paddingX: 3 }}>
+    <Stack justifyContent="flex-start" alignItems="center" sx={{ minHeight: "100vh", marginX: 4 }}>
       <Typography variant="subtitle2" mt={2}>My Crypto</Typography>
       <Typography variant="h2" sx={{ marginTop: 3, marginBottom: 3 }}>${(balance !== null && balance.toFixed(2)) || "--.--"}</Typography>
 
-      <Stack flexDirection="row" justifyContent={"space-between"} alignItems={"center"} width={0.9}>
+      <Stack flexDirection="row" justifyContent={"space-between"} alignItems={"center"} width={1}>
         <Button color="primary" variant="contained" sx={{ borderRadius: 4, width: 0.4, minWidth: "110px" }} onClick={() => navigate("/onramp")}>
           Get Crypto
         </Button>

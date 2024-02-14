@@ -1,7 +1,7 @@
 import { useUserContext } from '../context/UserContext.tsx';
 import OrderDisplay from "./OrderDisplay"
 import { useNavigate } from 'react-router-dom';
-import { Stack, Button } from '@mui/material';
+import { Stack, Button, Typography } from '@mui/material';
 import * as apis from '../utils/apirequests'
 
 export default function ReviewOrder() {
@@ -69,10 +69,12 @@ export default function ReviewOrder() {
   }
 
   return (
-    <Stack sx={{ minHeight: "100vh", marginX: 2, marginY: 4 }}>
+    <Stack sx={{ minHeight: "100vh", marginX: 4 }} alignItems={"center"}>
+      <Typography variant="subtitle2" mt={2} mb={4}>Review order</Typography>
+
       <OrderDisplay />
 
-      <Button variant="contained" sx={{ borderRadius: 4, minWidth: "100%", marginTop: 4 }} onClick={() => processOrder(amount, platform)}>
+      <Button variant="contained" color="secondary" sx={{ borderRadius: 10, width: 0.9, marginTop: 8 }} onClick={() => processOrder(amount, platform)}>
         Continue
       </Button>
     </Stack>

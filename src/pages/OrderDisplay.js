@@ -29,16 +29,16 @@ export default function OrderDisplay({ useGrayBackground = false }) {
   }, [setAmount, setPlatform])
 
   return (
-    <Stack className={componentClass}>
-      <Typography variant="h5">Get ${amount} of USDC</Typography>
-      <Typography>Est. {amount} USDC</Typography>
+    <Stack className={componentClass} width={1}>
+      <Typography variant="h5">Get ${amount && amount.toFixed(2)} of USDC</Typography>
+      <Typography>Est. {amount && amount.toFixed(2)} USDC</Typography>
 
-      <Stack flexDirection="row" justifyContent="space-between" sx={{ marginTop: 4 }} >
+      <Stack flexDirection="row" justifyContent="space-between" sx={{ marginTop: 3 }} >
         <Typography>Transfer method</Typography>
         <Typography>{(platform === "revolut" && "Revolut") || null}</Typography>
       </Stack>
 
-      <Stack flexDirection="row" justifyContent="space-between" sx={{ marginTop: 4 }} >
+      <Stack flexDirection="row" justifyContent="space-between" sx={{ marginTop: 3 }} >
         <Typography>Network</Typography>
         <Typography>Arbitrum</Typography>
       </Stack>
@@ -50,14 +50,14 @@ export default function OrderDisplay({ useGrayBackground = false }) {
         <Typography>1 USDC = $1.00</Typography>
       </Stack>
 
-      <Stack flexDirection="row" justifyContent="space-between" sx={{ marginTop: 4 }} >
+      <Stack flexDirection="row" justifyContent="space-between" sx={{ marginTop: 3 }} >
         <Typography>Fee</Typography>
-        <Typography>${fee.toFixed(2)}</Typography>
+        <Typography>${fee != null && fee.toFixed(2)}</Typography>
       </Stack>
 
-      <Stack flexDirection="row" justifyContent="space-between" sx={{ marginTop: 4 }} >
+      <Stack flexDirection="row" justifyContent="space-between" sx={{ marginTop: 3 }} >
         <Typography variant="subtitle1">Total cost</Typography>
-        <Typography>${parseFloat(amount) + fee}</Typography>
+        <Typography>${amount && (parseFloat(amount) + fee).toFixed(2)}</Typography>
       </Stack>
     </Stack>
   )
