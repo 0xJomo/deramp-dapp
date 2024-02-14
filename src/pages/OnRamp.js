@@ -27,44 +27,55 @@ export default function OnRamp() {
     if (shortValue.length - value.length < 0) {
       value = value.substring(0, shortValue.length)
     }
+    if (value.length === 0) {
+      e.target.parentNode.style.width = '4.8rem'
+    } else {
+      var len = value.length * 1.6 + 0.5
+      if (value.includes('.')) len -= 1.6
+      e.target.parentNode.style.width = `${len}rem`
+    }
     setText(value);
   };
 
   return (
-    <Stack justifyContent="space-evenly" alignItems="center" sx={{ paddingX: 1.5, minHeight: "100vh" }}>
+    <Stack alignItems="center" sx={{ paddingX: 1.5, minHeight: "100vh" }}>
 
-      <Stack alignItems="center" justifyContent="space-between" >
-        <Stack flexDirection="row" alignItems="center" justifyContent="center" sx={{ marginY: 2 }}>
-          <Typography variant="h2">$</Typography>
-          <Input
-            type="number"
-            value={text}
-            style={{ width: "6.5rem" }}
-            placeholder='0.00'
-            autoFocus={true}
-            disableUnderline={true}
-            sx={{ fontSize: "2.5rem" }}
-            onChange={handleInputChangeAndAdjustWidth}
-          />
+      <Typography variant="subtitle2" mt={2}>Get USDC</Typography>
+
+      <Stack flexGrow={1} gap={10} alignItems="center" width={1} justifyContent={"center"} maxHeight={"600px"}>
+        <Stack alignItems={"center"}>
+          <Stack flexDirection="row" alignItems="center" justifyContent="center" sx={{ marginY: 2 }}>
+            <Typography variant="h2">$</Typography>
+            <Input
+              type="number"
+              value={text}
+              style={{}}
+              placeholder='0.00'
+              autoFocus={true}
+              disableUnderline={true}
+              sx={{ fontSize: "2.5rem", width: "4.8rem" }}
+              onChange={handleInputChangeAndAdjustWidth}
+            />
+          </Stack>
+          <Typography variant="h5">{(parseFloat(text) || 0).toFixed(2)} USDC</Typography>
         </Stack>
-        <Typography variant="h5">{(parseFloat(text) || 0).toFixed(2)} USDC</Typography>
+        <Stack flexDirection="row" justifyContent="center" gap={4} width={"300px"}>
+          <Button sx={{ borderRadius: 4, margin: 1 }} variant="contained" onClick={() => setAmountAndRedirect(20)}>
+            $20
+          </Button>
+          <Button sx={{ borderRadius: 4, margin: 1 }} variant="contained" onClick={() => setAmountAndRedirect(50)}>
+            $50
+          </Button>
+          <Button sx={{ borderRadius: 4, margin: 1 }} variant="contained" onClick={() => setAmountAndRedirect(100)}>
+            $100
+          </Button>
+        </Stack>
+
+        <Button color="secondary" variant="contained" sx={{ borderRadius: 10, width: "300px" }} onClick={() => setAmountAndRedirect(parseFloat(text))}>
+          Next
+        </Button>
       </Stack>
 
-      <Stack flexDirection="row" justifyContent="space-between">
-        <Button sx={{ backgroundColor: theme.palette.secondary.dark, fontWeight: 700, paddingY: 0.5, paddingX: 1, borderRadius: 4, margin: 1 }} variant="contained" onClick={() => setAmountAndRedirect(20)}>
-          $20
-        </Button>
-        <Button sx={{ backgroundColor: theme.palette.secondary.dark, fontWeight: 700, paddingY: 0.5, paddingX: 1, borderRadius: 4, margin: 1 }} variant="contained" onClick={() => setAmountAndRedirect(50)}>
-          $50
-        </Button>
-        <Button sx={{ backgroundColor: theme.palette.secondary.dark, fontWeight: 700, paddingY: 0.5, paddingX: 1, borderRadius: 4, margin: 1 }} variant="contained" onClick={() => setAmountAndRedirect(100)}>
-          $100
-        </Button>
-      </Stack>
-
-      <Button color="secondary" variant="contained" sx={{ fontWeight: 700, borderRadius: 10, minWidth: "100%" }} onClick={() => setAmountAndRedirect(parseFloat(text))}>
-        Next
-      </Button>
     </Stack >
   );
 }

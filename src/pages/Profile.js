@@ -1,8 +1,9 @@
 import { useRef, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { usePrivySmartAccount } from '@zerodev/privy';
-import { Typography, Stack, Button } from '@mui/material';
+import { Typography, Stack, Button, IconButton } from '@mui/material';
 import { ethers } from 'ethers'
+import Iconify from '../components/iconify/Iconify.tsx';
 
 const usdcAbi = [
   // Read-Only Functions
@@ -68,25 +69,29 @@ export default function Profile() {
 
   return (
     <Stack justifyContent="flex-start" alignItems="center" sx={{ minHeight: "100vh", paddingX: 3 }}>
-      <Typography variant="h2" sx={{ marginTop: 6, marginBottom: 2 }}>${(balance !== null && balance.toFixed(2)) || "--.--"}</Typography>
+      <Typography variant="subtitle2" mt={2}>My Crypto</Typography>
+      <Typography variant="h2" sx={{ marginTop: 3, marginBottom: 3 }}>${(balance !== null && balance.toFixed(2)) || "--.--"}</Typography>
 
-      <Stack flexDirection="row">
-        <Button color="secondary" variant="contained" sx={{ fontWeight: 700, borderRadius: 1.5, minWidth: 7, marginRight: 1 }} onClick={() => navigate("/onramp")}>
+      <Stack flexDirection="row" justifyContent={"space-between"} alignItems={"center"} width={0.9}>
+        <Button color="primary" variant="contained" sx={{ borderRadius: 4, width: 0.4, minWidth: "110px" }} onClick={() => navigate("/onramp")}>
           Get Crypto
         </Button>
-        <Button color="secondary" variant="contained" sx={{ fontWeight: 700, borderRadius: 1.5, minWidth: 7, marginRight: 1 }} onClick={() => offRamp(100)}>
+        <Button color="primary" disabled={true} variant="contained" sx={{ borderRadius: 4, width: 0.4, minWidth: "105px" }} onClick={() => { }}>
           Cash Out
         </Button>
+        <IconButton sx={{ padding: 0 }}>
+          <Iconify height={40} width={40} color={"primary.main"} icon="mdi:send-circle" />
+        </IconButton>
       </Stack>
 
-      <Stack sx={{ minWidth: "100%", marginTop: 4 }} flexDirection="row">
+      <Stack sx={{ minWidth: "100%", marginTop: 4 }} flexDirection="row" alignItems={"center"}>
         <img
           src="/images/USDC.png"
           alt="USDC"
           width={48}
           height={48}
         />
-        <Stack flexGrow={1} sx={{ marginLeft: 1 }}>
+        <Stack flexGrow={1} sx={{ marginLeft: 2 }}>
           <Typography variant="h6">USDC</Typography >
           <Typography>{(balance !== null && balance.toFixed(2)) || "--.--"} USDC</Typography>
         </Stack>
