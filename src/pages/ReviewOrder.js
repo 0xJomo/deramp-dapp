@@ -74,7 +74,7 @@ export default function ReviewOrder() {
 
       <OrderDisplay />
 
-      <Button variant="contained" color="secondary" sx={{ borderRadius: 10, width: 0.9, marginTop: 8 }} onClick={() => processOrder(amount, platform)}>
+      <Button variant="contained" color="secondary" sx={{ borderRadius: 10, width: 1, marginTop: 8 }} onClick={() => processOrder(amount, platform)}>
         Continue
       </Button>
     </Stack>

@@ -2,7 +2,8 @@ import OrderDisplay from "./OrderDisplay.js"
 import { useUserContext } from '../context/UserContext.tsx';
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from 'react-router-dom';
-import { Typography, Stack, Button, Link, CircularProgress } from '@mui/material';
+import { Typography, Stack, Button, Link, CircularProgress, Box } from '@mui/material';
+import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import VerticalLinearStepper from "../components/stepper/VerticalLinearStepper.tsx";
 import Iconify from '../components/iconify/Iconify.tsx';
 import { JomoTlsnNotary } from 'jomo-tlsn-sdk/dist';
@@ -29,12 +30,16 @@ export default function ProcessBuyOrder() {
       'send_revolut_payment': {
         stepIdx: 0,
         label: `Send $${activeOrder?.amount + activeOrder?.fee} on Revolut to @${activeOrder?.recipient_id}`,
-        description: ``,
+        description: `Please send the exact amount to the correct recipient.`,
       },
       'verify_revolut_paymennt': {
         stepIdx: 1,
         label: 'Verify Revolut transfer',
-        description: <Typography variant="body1">Jomo Co-pilot add-on is required to verify Revolut transfers. <Link color={"#000"} target="_blank" href={`https://chrome.google.com/webstore/detail/${extensionName}/${extensionId}`}>Install now</Link></Typography>,
+        description:
+          <Stack gap={2}>
+            <Typography variant="body1">Jomo Co-pilot add-on is required to verify Revolut transfers. <Link color={"#000"} target="_blank" href={`https://chrome.google.com/webstore/detail/${extensionName}/${extensionId}`}>Install now</Link></Typography>
+            <Typography variant="body1">Sign in Revolut on the tab poping up and we will help you with the verification.</Typography>
+          </Stack>
       },
       'receive_usdc': {
         stepIdx: 2,
@@ -74,18 +79,23 @@ export default function ProcessBuyOrder() {
 
   function ConfirmTransferBottomsheet() {
     return (
-      <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "lightgrey", padding: 2, borderRadius: "16px 16px 0 0" }}>
-        <Typography variant="h3" sx={{ marginTop: 2 }}>Confirm transfer</Typography>
-        <Typography textAlign={"center"} sx={{ marginY: 2 }}>Please complete your transfer of exactly ${activeOrder?.amount + activeOrder?.fee} on Revolut to @{activeOrder?.recipient_id}, then
-          verify the transaction on DeRamp. Transferring more than ${activeOrder?.amount + activeOrder?.fee} could result in a loss of funds.
-        </Typography>
-        <Button variant="contained" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 2 }} onClick={confirmTransferComplete}>
-          I have completed my transfer
-        </Button>
-        <Button variant="text" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 6 }} onClick={() => setBottomSheet("pendingSendFiat")}>
-          Return to make the transfer
-        </Button>
-      </Stack>
+      <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "#ECECEC", padding: 2, borderRadius: "16px 16px 0 0" }}>
+        <Stack maxWidth={"550px"} alignItems={"center"} gap={2}>
+          <Typography variant="h4" sx={{ marginTop: 2 }}>Confirm transfer</Typography>
+          <Typography textAlign={"center"}>
+            Please confirm that you have completed your transfer of <b>exactly ${activeOrder?.amount + activeOrder?.fee}</b> on Revolut to <b>@{activeOrder?.recipient_id}</b>.
+          </Typography>
+          <Typography textAlign={"center"}>
+            <b>Transferring more than ${activeOrder?.amount + activeOrder?.fee} could result in a loss of funds.</b>
+          </Typography>
+          <Button color="secondary" variant="contained" sx={{ minWidth: "80%", borderRadius: 6 }} onClick={confirmTransferComplete}>
+            I have completed my transfer
+          </Button>
+          <Button variant="text" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 2 }} onClick={() => setBottomSheet("pendingSendFiat")}>
+            Return to make the transfer
+          </Button>
+        </Stack>
+      </Stack >
     )
   }
 
@@ -96,36 +106,43 @@ export default function ProcessBuyOrder() {
 
   function SendWithRevolutBottomsheet() {
     return (
-      <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "lightgrey", padding: 2, borderRadius: "16px 16px 0 0" }}>
-        <Typography variant="h3" sx={{ marginTop: 2 }}>Send with Revolut</Typography>
-        <Typography textAlign={"center"} sx={{ marginY: 2 }}>Please complete your transfer of exactly ${activeOrder?.amount + activeOrder?.fee} on Revolut to @{activeOrder?.recipient_id}, then verify the transaction on DeRamp.
-          Transferring more than ${activeOrder?.amount + activeOrder?.fee} could result in a loss of funds.
-        </Typography>
-        <QRCode value={`https://revolut.me/${activeOrder.recipient_id}`} />
-        <Button variant="contained" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 2 }} onClick={() => redirectToRevolutPayment(activeOrder)}>
-          Go to Revolut
-        </Button>
-        <Button variant="text" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 6 }} onClick={() => setBottomSheet("confirmingTransfer")}>
-          I have completed the transfer in Revolut app
-        </Button>
+      <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "#ECECEC", padding: 2, borderRadius: "16px 16px 0 0" }}>
+        <Stack maxWidth={"550px"} alignItems={"center"} gap={2}>
+          <Typography variant="h4" sx={{ marginTop: 2 }}>Send with Revolut</Typography>
+          <Typography textAlign={"center"}>
+            Please complete your transfer of <b>exactly ${activeOrder?.amount + activeOrder?.fee}</b> on Revolut to <b>@{activeOrder?.recipient_id}</b>, then verify the transaction on DeRamp.
+          </Typography>
+          <Typography textAlign={"center"}>
+            <b>Transferring more than ${activeOrder?.amount + activeOrder?.fee} could result in a loss of funds.</b>
+          </Typography>
+          <QRCode size={120} value={`https://revolut.me/${activeOrder.recipient_id}`} />
+          <Button color="secondary" variant="contained" sx={{ minWidth: "80%", borderRadius: 6 }} onClick={() => redirectToRevolutPayment(activeOrder)}>
+            Go to Revolut
+          </Button>
+          <Button variant="text" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 2 }} onClick={confirmTransferComplete}>
+            I have completed the transfer in Revolut app
+          </Button>
+        </Stack>
       </Stack>
     )
   }
 
   function AddJomoCopilotBottomsheet() {
     return (
-      <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "lightgrey", padding: 2, borderRadius: "16px 16px 0 0" }}>
-        <Typography variant="h3" sx={{ marginTop: 2 }}>Add Jomo Copilot</Typography>
-        <Typography textAlign={"center"} sx={{ marginY: 2 }}>
-          Jomo Copilot on Firefox is required to verify pe er-to-peer transfers on apps like Revolut
-          and Venmo to then send you crypto on-chain. Jomo uses cryptography so that your user data is not read or stored any where.
-        </Typography>
-        <Button variant="contained" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 6 }} onClick={() => {
-          window.open(`https://chrome.google.com/webstore/detail/${extensionName}/${extensionId}`, '_blank');
-          setBottomSheet("extensionAdded")
-        }}>
-          Add Jomo Copilot on Firefox
-        </Button>
+      <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "#ECECEC", padding: 2, borderRadius: "16px 16px 0 0" }}>
+        <Stack maxWidth={"550px"} alignItems={"center"} gap={2}>
+          <Typography variant="h4" sx={{ marginTop: 2 }}>Add Jomo Copilot</Typography>
+          <Typography textAlign={"center"}>
+            Jomo Copilot extension is required to verify peer-to-peer transfers on apps like Revolut
+            and Venmo to then send you crypto on-chain. Jomo uses cryptography so that your user data is not read or stored any where.
+          </Typography>
+          <Button color="secondary" variant="contained" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 2 }} onClick={() => {
+            window.open(`https://chrome.google.com/webstore/detail/${extensionName}/${extensionId}`, '_blank');
+            setBottomSheet("extensionAdded")
+          }}>
+            Install Jomo Copilot extension
+          </Button>
+        </Stack>
       </Stack>
     )
   }
@@ -134,12 +151,14 @@ export default function ProcessBuyOrder() {
     return (
       <>
         {bottomSheet === "extensionAdded" &&
-          <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "lightgrey", padding: 2, borderRadius: "16px 16px 0 0" }}>
-            <Typography variant="h3" sx={{ marginTop: 2 }}>Jomo Copilot Added!</Typography>
-            <Iconify height={36} width={36} color={"success.main"} icon="material-symbols:check" />
-            <Button variant="contained" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 6 }} onClick={() => { setBottomSheet("") }}>
-              Continue
-            </Button>
+          <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "#ECECEC", padding: 2, borderRadius: "16px 16px 0 0" }}>
+            <Stack maxWidth={"550px"} alignItems={"center"} gap={2}>
+              <Typography variant="h4" sx={{ marginTop: 2 }}>Jomo Copilot Added!</Typography>
+              <Iconify height={72} width={72} color={"primary.main"} icon="icon-park-solid:check-one" />
+              <Button color="secondary" variant="contained" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 2 }} onClick={() => { setBottomSheet("") }}>
+                Continue
+              </Button>
+            </Stack>
           </Stack>
         }
       </>
@@ -148,12 +167,14 @@ export default function ProcessBuyOrder() {
 
   function VerifyingBottomsheet() {
     return (
-      <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "lightgrey", padding: 2, borderRadius: "16px 16px 0 0" }}>
-        <Typography variant="h3" sx={{ marginTop: 2 }}>Verifiying...</Typography>
-        <CircularProgress size={24} color="primary" />
-        <Typography textAlign={"center"} sx={{ marginY: 2 }}>
-          Hold on to your potatoes! This should only take less than a minute...
-        </Typography>
+      <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "#ECECEC", padding: 2, borderRadius: "16px 16px 0 0" }}>
+        <Stack maxWidth={"550px"} alignItems={"center"} gap={2}>
+          <Typography variant="h4" sx={{ marginTop: 2 }}>Verifying...</Typography>
+          <CircularProgress size={72} color="primary" />
+          <Typography textAlign={"center"} mb={2}>
+            Hold on to your potatoes! This should only take less than a minute...
+          </Typography>
+        </Stack>
       </Stack>
     )
   }
@@ -162,15 +183,17 @@ export default function ProcessBuyOrder() {
     return (
       <>
         {activeStep === 1 &&
-          <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "lightgrey", padding: 2, borderRadius: "16px 16px 0 0" }}>
-            <Typography variant="h3" sx={{ marginTop: 2 }}>Verification complete!</Typography>
-            <Iconify height={36} width={36} color={"success.main"} icon="material-symbols:check" />
-            <Typography textAlign={"center"} sx={{ marginY: 2 }}>
-              We verified that you've completed a transfer of ${activeOrder?.amount + activeOrder?.fee} to @{activeOrder?.recipient_id} on Revolut
-            </Typography>
-            <Button variant="contained" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 6 }} onClick={() => { setActiveStep(2) }}>
-              Done
-            </Button>
+          <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "#ECECEC", padding: 2, borderRadius: "16px 16px 0 0" }}>
+            <Stack maxWidth={"550px"} alignItems={"center"} gap={2}>
+              <Typography variant="h4" sx={{ marginTop: 2 }}>Verification complete!</Typography>
+              <Iconify height={72} width={72} color={"primary.main"} icon="icon-park-solid:check-one" />
+              <Typography textAlign={"center"}>
+                We verified that you've completed a transfer of ${activeOrder?.amount + activeOrder?.fee} to @{activeOrder?.recipient_id} on Revolut
+              </Typography>
+              <Button color="secondary" variant="contained" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 2 }} onClick={() => { setActiveStep(2) }}>
+                Done
+              </Button>
+            </Stack>
           </Stack>
         }
       </>
@@ -179,37 +202,41 @@ export default function ProcessBuyOrder() {
 
   function SendingCryptoBottomsheet() {
     return (
-      <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "lightgrey", padding: 2, borderRadius: "16px 16px 0 0" }}>
-        <Typography variant="h3" sx={{ marginTop: 2 }}>Transaction Pending</Typography>
-        <CircularProgress size={24} color="primary" />
-        <Typography textAlign={"center"} sx={{ marginY: 2 }}>
-          Your transaction is pending, ou will receive ${activeOrder?.amount} of USDC on DeRamp shortly. Typically this can take up to a minute.
-        </Typography>
-        <Button variant="contained" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 6 }} onClick={() => { setBottomSheet("") }}>
-          Done
-        </Button>
+      <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "#ECECEC", padding: 2, borderRadius: "16px 16px 0 0" }}>
+        <Stack maxWidth={"550px"} alignItems={"center"} gap={2}>
+          <Typography variant="h4" sx={{ marginTop: 2 }}>Transaction Pending</Typography>
+          <CircularProgress size={72} color="primary" />
+          <Typography textAlign={"center"}>
+            Your transaction is pending, you will receive ${activeOrder?.amount} of USDC on DeRamp shortly. Typically this can take up to a minute.
+          </Typography>
+          <Button color="secondary" variant="contained" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 2 }} onClick={() => { setBottomSheet("") }}>
+            Done
+          </Button>
+        </Stack>
       </Stack>
     )
   }
 
   function SentCryptoBottomsheet() {
     return (
-      <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "lightgrey", padding: 2, borderRadius: "16px 16px 0 0" }}>
-        <Typography variant="h3" sx={{ marginTop: 2 }}>You got crypto!</Typography>
-        <Iconify height={36} width={36} color={"success.main"} icon="material-symbols:check" />
-        <Typography textAlign={"center"} sx={{ marginY: 2 }}>
-          You received ${activeOrder?.amount} of USDC.
-        </Typography>
-        <Button variant="contained" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 6 }} onClick={() => { window.location.href = "/profile" }}>
-          View Balance
-        </Button>
+      <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "#ECECEC", padding: 2, borderRadius: "16px 16px 0 0" }}>
+        <Stack maxWidth={"550px"} alignItems={"center"} gap={2}>
+          <Typography variant="h4" sx={{ marginTop: 2 }}>You got crypto!</Typography>
+          <Iconify height={72} width={72} color={"success.main"} icon="icon-park-solid:check-one" />
+          <Typography textAlign={"center"}>
+            You received ${activeOrder?.amount} of USDC.
+          </Typography>
+          <Button color="secondary" variant="contained" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 2 }} onClick={() => { window.location.href = "/profile" }}>
+            View Balance
+          </Button>
+        </Stack>
       </Stack>
     )
   }
 
   function childExtensionNotFound() {
     return (
-      <Button variant="contained" sx={{ borderRadius: 6, marginTop: 4 }} onClick={() => { setBottomSheet("addExtension") }}>
+      <Button fullWidth color="secondary" variant="contained" sx={{ borderRadius: 6, marginTop: 4 }} onClick={() => { setBottomSheet("addExtension") }}>
         Verify with Jomo-Copilot
       </Button>
     )
@@ -221,7 +248,7 @@ export default function ProcessBuyOrder() {
 
   function childExtensionFound() {
     return (
-      <Button variant="contained" sx={{ borderRadius: 6, marginTop: 4 }}>
+      <Button fullWidth color="secondary" variant="contained" sx={{ borderRadius: 6, marginTop: 4 }}>
         Sign-in to Revolut to verify
       </Button>
     )
@@ -345,73 +372,88 @@ export default function ProcessBuyOrder() {
   }, [])
 
   return (
-    <Stack sx={{ minHeight: "100vh", marginX: 2, marginY: 4, padding: 1 }}>
-      <OrderDisplay useGrayBackground={true} />
+    <Stack sx={{ minHeight: "100vh", marginX: 4, marginY: 4 }} gap={2} alignItems={"center"}>
+      <OrderDisplay useGrayBackground={true} collapsable={true} />
 
-      <VerticalLinearStepper
-        sx={{
-          textAlign: "left",
-          maxWidth: "450px",
-          minWidth: "300px",
-          marginTop: "20px",
-        }}
-        steps={STEPS.stepIds}
-        parentActiveStep={activeStep}
-        renderStepLabel={renderStepLabel}
-        renderStepContent={renderStepContent}
-        showReset={true}
-        renderResetContent={renderResetContent}
-      />
+      <Stack width={0.95} alignItems={"center"}>
+        <Typography>
+          Complete your order by transferring ${activeOrder?.amount + activeOrder?.fee} on Revolut then verify the transaction on DeRamp.
+        </Typography>
 
-      {activeStep === 0 &&
-        <Button variant="contained" sx={{ borderRadius: 6, marginTop: 4 }} onClick={() => setBottomSheet("pendingSendFiat")}>
-          Send with Revolut
-        </Button>
-      }
-      {activeStep === 1 &&
-        <JomoTlsnNotary
-          notaryServers={{
-            notaryServerHost: process.env.REACT_APP_NOTARY_SERVER,
-            notaryServerSsl: process.env.REACT_APP_NOTARY_SSL === "ssl",
-            websockifyServer: process.env.REACT_APP_WEBSOCKIFY_SERVER,
+        <VerticalLinearStepper
+          sx={{
+            textAlign: "left",
+            maxWidth: "450px",
+            minWidth: "300px",
+            marginTop: "20px",
           }}
-          // extensionId="hebchjefjhiinmhpkcgcadmmhhfcljed"
-          extensionConfigs={{
-            redirectUrl: "https://app.revolut.com/home",
-            urlFilters: ["https://app.revolut.com/api/retail/user/current/wallet"],
-          }}
-          applicationConfigs={{
-            appServer: revolutServer,
-          }}
-          onNotarizationResult={onNotarizationResult}
-          defaultNotaryFlowConfigs={{
-            defaultNotaryFlow: true,
-            buildAuthHeaders: buildAuthHeaders,
-            queryPath: "api/retail/user/current/wallet",
-            queryMethod: "GET",
-            buildDataPathWithResponse: buildDataPathWithResponse,
-            dataMethod: "GET",
-            keysToNotarize: [["account"], ["amount"], ["category"], ["comment"], ["completeDate"], ["id"], ["state"], ["recipient", "id"], ["recipient", "code"], ["currency"]],
-          }}
-          childExtensionNotFound={childExtensionNotFound()}
-          childExtensionInstalled={childExtensionInstalled()}
-          childExtensionFound={childExtensionFound()}
-          childVerificationInProgress={childVerificationInProgress()}
-          childVerificationComplete={childVerificationComplete()}
-          childVerificationFail={childVerificationFail()}
+          steps={STEPS.stepIds}
+          parentActiveStep={activeStep}
+          renderStepLabel={renderStepLabel}
+          renderStepContent={renderStepContent}
+          showReset={true}
+          renderResetContent={renderResetContent}
         />
-      }
-      {activeStep === 2 &&
-        <Button variant="contained" sx={{ borderRadius: 6, marginTop: 4 }} onClick={() => setBottomSheet("pendingSendCrypto")}>
-          Transaction Pending
-        </Button>
-      }
 
-      {bottomSheet === "pendingSendFiat" && <SendWithRevolutBottomsheet />}
-      {bottomSheet === "confirmingTransfer" && <ConfirmTransferBottomsheet />}
-      {bottomSheet === "addExtension" && <AddJomoCopilotBottomsheet />}
-      {bottomSheet === "pendingSendCrypto" && <SendingCryptoBottomsheet />}
-      {bottomSheet === "cryptoTransferComplete" && <SentCryptoBottomsheet />}
+        <ClickAwayListener onClickAway={() => {
+          if (bottomSheet !== "" && bottomSheet !== "cryptoTransferComplete") setBottomSheet("")
+        }}>
+          <Box width={1} maxWidth={"450px"}>
+            {activeStep === 0 &&
+              <Button fullWidth color="secondary" variant="contained" sx={{ borderRadius: 6, marginTop: 4 }} onClick={() => setBottomSheet("pendingSendFiat")}>
+                Send with Revolut
+              </Button>
+            }
+            {activeStep === 1 &&
+              <JomoTlsnNotary
+                notaryServers={{
+                  notaryServerHost: process.env.REACT_APP_NOTARY_SERVER,
+                  notaryServerSsl: process.env.REACT_APP_NOTARY_SSL === "ssl",
+                  websockifyServer: process.env.REACT_APP_WEBSOCKIFY_SERVER,
+                }}
+                // extensionId="hebchjefjhiinmhpkcgcadmmhhfcljed"
+                extensionConfigs={{
+                  redirectUrl: "https://app.revolut.com/home",
+                  urlFilters: ["https://app.revolut.com/api/retail/user/current/wallet"],
+                }}
+                applicationConfigs={{
+                  appServer: revolutServer,
+                }}
+                onNotarizationResult={onNotarizationResult}
+                defaultNotaryFlowConfigs={{
+                  defaultNotaryFlow: true,
+                  buildAuthHeaders: buildAuthHeaders,
+                  queryPath: "api/retail/user/current/wallet",
+                  queryMethod: "GET",
+                  buildDataPathWithResponse: buildDataPathWithResponse,
+                  dataMethod: "GET",
+                  keysToNotarize: [["account"], ["amount"], ["category"], ["comment"], ["completeDate"], ["id"], ["state"], ["recipient", "id"], ["recipient", "code"], ["currency"]],
+                }}
+                childExtensionNotFound={childExtensionNotFound()}
+                childExtensionInstalled={childExtensionInstalled()}
+                childExtensionFound={childExtensionFound()}
+                childVerificationInProgress={childVerificationInProgress()}
+                childVerificationComplete={childVerificationComplete()}
+                childVerificationFail={childVerificationFail()}
+              />
+            }
+            {activeStep === 2 &&
+              <Button fullWidth color="secondary" variant="contained" sx={{ borderRadius: 6, marginTop: 4 }} onClick={() => setBottomSheet("pendingSendCrypto")}>
+                Transaction Pending
+              </Button>
+            }
+            {bottomSheet &&
+              <Box>
+                {bottomSheet === "pendingSendFiat" && <SendWithRevolutBottomsheet />}
+                {bottomSheet === "confirmingTransfer" && <ConfirmTransferBottomsheet />}
+                {bottomSheet === "addExtension" && <AddJomoCopilotBottomsheet />}
+                {bottomSheet === "pendingSendCrypto" && <SendingCryptoBottomsheet />}
+                {bottomSheet === "cryptoTransferComplete" && <SentCryptoBottomsheet />}
+              </Box>
+            }
+          </Box>
+        </ClickAwayListener>
+      </Stack>
     </Stack >
   )
 }
