@@ -20,25 +20,27 @@ export default function ProcessBuyOrder() {
 
   const navigate = useNavigate();
 
-  const revolutServer = "app.revolut.com"
+  const p2pAppServer = {
+    "revolut": "app.revolut.com"
+  }[activeOrder?.p2p_platform]
   const extensionId = "nmdnfckjjghlbjeodefnapacfnocpdgm"
   const extensionName = "jomo-copilot"
 
   const STEPS = {
-    stepIds: ['send_revolut_payment', 'verify_revolut_paymennt', 'receive_usdc'],
+    stepIds: ['send_p2p_payment', 'verify_p2p_paymennt', 'receive_usdc'],
     stepDetails: {
-      'send_revolut_payment': {
+      'send_p2p_payment': {
         stepIdx: 0,
-        label: `Send $${activeOrder?.amount + activeOrder?.fee} on Revolut to @${activeOrder?.recipient_id}`,
+        label: `Send $${activeOrder?.amount + activeOrder?.fee} on ${(activeOrder?.p2p_platform === "revolut" && "Revolut")} to @${activeOrder?.recipient_id}`,
         description: `Please send the exact amount to the correct recipient.`,
       },
-      'verify_revolut_paymennt': {
+      'verify_p2p_paymennt': {
         stepIdx: 1,
-        label: 'Verify Revolut transfer',
+        label: `Verify ${(activeOrder?.p2p_platform === "revolut" && "Revolut")} transfer`,
         description:
           <Stack gap={2}>
-            <Typography variant="body1">Jomo Co-pilot add-on is required to verify Revolut transfers. <Link color={"#000"} target="_blank" href={`https://chrome.google.com/webstore/detail/${extensionName}/${extensionId}`}>Install now</Link></Typography>
-            <Typography variant="body1">Sign in Revolut on the tab poping up and we will help you with the verification.</Typography>
+            <Typography variant="body1">Jomo Co-pilot add-on is required to verify {(activeOrder?.p2p_platform === "revolut" && "Revolut")} transfers. <Link color={"#000"} target="_blank" href={`https://chrome.google.com/webstore/detail/${extensionName}/${extensionId}`}>Install now</Link></Typography>
+            <Typography variant="body1">Sign in {(activeOrder?.p2p_platform === "revolut" && "Revolut")} on the tab poping up and we will help you with the verification.</Typography>
           </Stack>
       },
       'receive_usdc': {
@@ -83,7 +85,7 @@ export default function ProcessBuyOrder() {
         <Stack maxWidth={"550px"} alignItems={"center"} gap={2}>
           <Typography variant="h4" sx={{ marginTop: 2 }}>Confirm transfer</Typography>
           <Typography textAlign={"center"}>
-            Please confirm that you have completed your transfer of <b>exactly ${activeOrder?.amount + activeOrder?.fee}</b> on Revolut to <b>@{activeOrder?.recipient_id}</b>.
+            Please confirm that you have completed your transfer of <b>exactly ${activeOrder?.amount + activeOrder?.fee}</b> on {(activeOrder?.p2p_platform === "revolut" && "Revolut")} to <b>@{activeOrder?.recipient_id}</b>.
           </Typography>
           <Typography textAlign={"center"}>
             <b>Transferring more than ${activeOrder?.amount + activeOrder?.fee} could result in a loss of funds.</b>
@@ -99,28 +101,30 @@ export default function ProcessBuyOrder() {
     )
   }
 
-  async function redirectToRevolutPayment(order) {
-    window.open(`https://revolut.me/${order.recipient_id}`, "_blank")
+  async function redirectToP2pPayment(order) {
+    if (activeOrder?.p2p_platform === "revolut") {
+      window.open(`https://revolut.me/${order.recipient_id}`, "_blank")
+    }
     setBottomSheet("confirmingTransfer")
   }
 
-  function SendWithRevolutBottomsheet() {
+  function SendWithP2pBottomsheet() {
     return (
       <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "#ECECEC", padding: 2, borderRadius: "16px 16px 0 0" }}>
         <Stack maxWidth={"550px"} alignItems={"center"} gap={2}>
-          <Typography variant="h4" sx={{ marginTop: 2 }}>Send with Revolut</Typography>
+          <Typography variant="h4" sx={{ marginTop: 2 }}>Send with {(activeOrder?.p2p_platform === "revolut" && "Revolut")}</Typography>
           <Typography textAlign={"center"}>
-            Please complete your transfer of <b>exactly ${activeOrder?.amount + activeOrder?.fee}</b> on Revolut to <b>@{activeOrder?.recipient_id}</b>, then verify the transaction on DeRamp.
+            Please complete your transfer of <b>exactly ${activeOrder?.amount + activeOrder?.fee}</b> on {(activeOrder?.p2p_platform === "revolut" && "Revolut")} to <b>@{activeOrder?.recipient_id}</b>, then verify the transaction on DeRamp.
           </Typography>
           <Typography textAlign={"center"}>
             <b>Transferring more than ${activeOrder?.amount + activeOrder?.fee} could result in a loss of funds.</b>
           </Typography>
-          <QRCode size={120} value={`https://revolut.me/${activeOrder.recipient_id}`} />
-          <Button color="secondary" variant="contained" sx={{ minWidth: "80%", borderRadius: 6 }} onClick={() => redirectToRevolutPayment(activeOrder)}>
-            Go to Revolut
+          <QRCode size={120} value={(activeOrder?.p2p_platform === "revolut" && `https://revolut.me/${activeOrder.recipient_id}`)} />
+          <Button color="secondary" variant="contained" sx={{ minWidth: "80%", borderRadius: 6 }} onClick={() => redirectToP2pPayment(activeOrder)}>
+            Go to {(activeOrder?.p2p_platform === "revolut" && "Revolut")}
           </Button>
           <Button variant="text" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 2 }} onClick={confirmTransferComplete}>
-            I have completed the transfer in Revolut app
+            I have completed the transfer in {(activeOrder?.p2p_platform === "revolut" && "Revolut")} app
           </Button>
         </Stack>
       </Stack>
@@ -188,7 +192,7 @@ export default function ProcessBuyOrder() {
               <Typography variant="h4" sx={{ marginTop: 2 }}>Verification complete!</Typography>
               <Iconify height={72} width={72} color={"primary.main"} icon="icon-park-solid:check-one" />
               <Typography textAlign={"center"}>
-                We verified that you've completed a transfer of ${activeOrder?.amount + activeOrder?.fee} to @{activeOrder?.recipient_id} on Revolut
+                We verified that you've completed a transfer of ${activeOrder?.amount + activeOrder?.fee} to @{activeOrder?.recipient_id} on {(activeOrder?.p2p_platform === "revolut" && "Revolut")}
               </Typography>
               <Button color="secondary" variant="contained" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 2 }} onClick={() => { setActiveStep(2) }}>
                 Done
@@ -249,7 +253,7 @@ export default function ProcessBuyOrder() {
   function childExtensionFound() {
     return (
       <Button fullWidth color="secondary" variant="contained" sx={{ borderRadius: 6, marginTop: 4 }}>
-        Sign-in to Revolut to verify
+        Sign-in to {(activeOrder?.p2p_platform === "revolut" && "Revolut")} to verify
       </Button>
     )
   }
@@ -277,7 +281,7 @@ export default function ProcessBuyOrder() {
       ["Cookie", cookie],
       ["X-Device-Id", deviceId],
       ["User-Agent", userAgent],
-      ["Host", revolutServer],
+      ["Host", p2pAppServer],
     ])
     return authedHeader
   }
@@ -377,7 +381,7 @@ export default function ProcessBuyOrder() {
 
       <Stack width={0.95} alignItems={"center"}>
         <Typography>
-          Complete your order by transferring ${activeOrder?.amount + activeOrder?.fee} on Revolut then verify the transaction on DeRamp.
+          Complete your order by transferring ${activeOrder?.amount + activeOrder?.fee} on {(activeOrder?.p2p_platform === "revolut" && "Revolut")} then verify the transaction on DeRamp.
         </Typography>
 
         <VerticalLinearStepper
@@ -401,10 +405,10 @@ export default function ProcessBuyOrder() {
           <Box width={1} maxWidth={"450px"}>
             {activeStep === 0 &&
               <Button fullWidth color="secondary" variant="contained" sx={{ borderRadius: 6, marginTop: 4 }} onClick={() => setBottomSheet("pendingSendFiat")}>
-                Send with Revolut
+                Send with {(activeOrder?.p2p_platform === "revolut" && "Revolut")}
               </Button>
             }
-            {activeStep === 1 &&
+            {activeStep === 1 && activeOrder?.p2p_platform === "revolut" && "Revolut" &&
               <JomoTlsnNotary
                 notaryServers={{
                   notaryServerHost: process.env.REACT_APP_NOTARY_SERVER,
@@ -417,7 +421,7 @@ export default function ProcessBuyOrder() {
                   urlFilters: ["https://app.revolut.com/api/retail/user/current/wallet"],
                 }}
                 applicationConfigs={{
-                  appServer: revolutServer,
+                  appServer: p2pAppServer,
                 }}
                 onNotarizationResult={onNotarizationResult}
                 defaultNotaryFlowConfigs={{
@@ -444,7 +448,7 @@ export default function ProcessBuyOrder() {
             }
             {bottomSheet &&
               <Box>
-                {bottomSheet === "pendingSendFiat" && <SendWithRevolutBottomsheet />}
+                {bottomSheet === "pendingSendFiat" && <SendWithP2pBottomsheet />}
                 {bottomSheet === "confirmingTransfer" && <ConfirmTransferBottomsheet />}
                 {bottomSheet === "addExtension" && <AddJomoCopilotBottomsheet />}
                 {bottomSheet === "pendingSendCrypto" && <SendingCryptoBottomsheet />}
