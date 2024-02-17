@@ -57,7 +57,7 @@ export default function OrderDisplay({ useGrayBackground = false, collapsable = 
 
         <Stack flexDirection="row" justifyContent="space-between" sx={{ marginTop: 3 }} >
           <Typography>Network</Typography>
-          <Typography>Arbitrum</Typography>
+          <Typography>Blast</Typography>
         </Stack>
 
         <Divider sx={{ marginTop: 4 }} />

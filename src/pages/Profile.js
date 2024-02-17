@@ -4,6 +4,7 @@ import { usePrivySmartAccount } from '@zerodev/privy';
 import { Typography, Stack, Button, IconButton } from '@mui/material';
 import { ethers } from 'ethers'
 import Iconify from '../components/iconify/Iconify.tsx';
+import * as apis from '../utils/apirequests'
 
 const usdcAbi = [
   // Read-Only Functions
@@ -46,6 +47,20 @@ export default function Profile() {
     if (ready && authenticated && zeroDevReady) {
       getAccessToken().then((token) => {
         localStorage.setItem("access_token", token)
+
+        apis.backendRequest(
+          'auth/check',
+          {},
+          {
+            Authorization: "Bearer " + token
+          },
+        ).then(([requestStatus, _]) => {
+          console.log(requestStatus)
+          if (requestStatus === 401) {
+            navigate('/logout')
+            return
+          }
+        })
       })
 
       if (isFirstMount.current) {

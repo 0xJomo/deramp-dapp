@@ -17,8 +17,10 @@ export default function Home() {
   }, [ready, authenticated, zeroDevReady])
 
   return (
-    <Stack alignItems={"center"} justifyContent={"space-evenly"} sx={{ minHeight: "100vh", paddingX: 3 }}>
+    <Stack alignItems={"center"} justifyContent={"center"} gap={10} sx={{ minHeight: "100vh", paddingX: 3 }}>
       <Typography variant="h2">DeRamp</Typography>
+
+      <Typography variant="h4" textAlign={"center"}>The cheapest & fastest crypto on-ramp</Typography>
 
       <Stack sx={{ minWidth: "100%" }}>
         <Button variant="contained" sx={{ borderRadius: 1.5, minWidth: "100%" }} onClick={() => {
