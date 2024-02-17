@@ -29,11 +29,15 @@ export default function ReviewOrder() {
     lockOrder(amount, platform)
   }
 
-  const lockOrder = async function (amount) {
+  const lockOrder = async function (amount, platform) {
+    const chain = "Blast"
+
     const [requestStatus, lockResponse] = await apis.backendRequest(
       'orders/buy/create',
       {
-        buy_amount: parseFloat(amount)
+        buy_amount: parseFloat(amount),
+        p2p_platform: platform,
+        chain: chain
       },
       {
         Authorization: "Bearer " + localStorage.getItem("access_token")
@@ -48,15 +52,14 @@ export default function ReviewOrder() {
     if (lockResponse && lockResponse.buy_order_id) {
       // TODO: extract info from response
       const order_id = lockResponse.buy_order_id
-      const p2p_platform = "revolut"
-      const recipient_id = "yuchennlxy"
+      const recipient_id = lockResponse.recipient_id
       const fee = 0
 
       const order = {
         amount: parseFloat(amount),
         fee: fee,
         order_id: order_id,
-        p2p_platform: p2p_platform,
+        p2p_platform: platform,
         recipient_id: recipient_id,
       }
       setActiveOrder(order)
