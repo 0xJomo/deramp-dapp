@@ -10,16 +10,26 @@ export default function ReviewOrder() {
 
   const { amount, platform, activeOrder, setActiveOrder } = useUserContext()
 
+  const chain = "Sepolia"
+
   const processOrder = async function (amount, platform) {
-    if (activeOrder && activeOrder.amount === amount && activeOrder.p2p_platform === platform && !activeOrder.completed) {
+    if (activeOrder
+      && activeOrder.amount === amount
+      && activeOrder.p2p_platform === platform
+      && activeOrder.chain === chain
+      && !activeOrder.completed
+    ) {
       window.location.href = '/buy'
       return
     }
     const storedOrder = localStorage.getItem("active_onramp_order")
     if (storedOrder) {
       const decodedOrder = JSON.parse(storedOrder)
-      console.log(decodedOrder, amount, platform)
-      if (decodedOrder.amount === amount && decodedOrder.p2p_platform === platform && !decodedOrder.completed) {
+      if (decodedOrder.amount === amount
+        && decodedOrder.p2p_platform === platform
+        && decodedOrder.chain === chain
+        && !decodedOrder.completed
+      ) {
         setActiveOrder(decodedOrder)
         window.location.href = '/buy'
         return
@@ -30,8 +40,6 @@ export default function ReviewOrder() {
   }
 
   const lockOrder = async function (amount, platform) {
-    const chain = "Blast"
-
     const [requestStatus, lockResponse] = await apis.backendRequest(
       'orders/buy/create',
       {
@@ -48,9 +56,7 @@ export default function ReviewOrder() {
       navigate('/logout')
       return
     }
-    console.log(lockResponse)
     if (lockResponse && lockResponse.buy_order_id) {
-      // TODO: extract info from response
       const order_id = lockResponse.buy_order_id
       const recipient_id = lockResponse.recipient_id
       const fee = 0
@@ -61,13 +67,14 @@ export default function ReviewOrder() {
         order_id: order_id,
         p2p_platform: platform,
         recipient_id: recipient_id,
+        chain: chain,
       }
       setActiveOrder(order)
       localStorage.setItem("active_onramp_order", JSON.stringify(order))
 
       window.location.href = '/buy'
     } else {
-      // TODO: insert some error messages
+      console.log(lockResponse)
     }
   }
 

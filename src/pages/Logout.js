@@ -9,6 +9,7 @@ export default function Logout() {
   useEffect(() => {
     logout()
     localStorage.removeItem("access_token")
+    localStorage.removeItem("active_onramp_order")
     navigate('/')
   }, [])
 

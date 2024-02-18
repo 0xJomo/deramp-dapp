@@ -238,6 +238,26 @@ export default function ProcessBuyOrder() {
     )
   }
 
+  function VerifyFailedBottomsheet() {
+    return (
+      <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "#ECECEC", padding: 2, borderRadius: "16px 16px 0 0" }}>
+        <Stack maxWidth={"550px"} alignItems={"center"} gap={2}>
+          <Typography variant="h4" sx={{ marginTop: 2 }}>Failed to verify</Typography>
+          <Iconify height={72} width={72} color={"error.main"} icon="radix-icons:cross-1" />
+          <Typography textAlign={"center"}>
+            We were unable to verify your transfer.
+          </Typography>
+          <Button color="secondary" variant="contained" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 2 }} onClick={() => {
+            setBottomSheet("")
+            setActiveStep(0)
+          }}>
+            Done
+          </Button>
+        </Stack>
+      </Stack>
+    )
+  }
+
   function childExtensionNotFound() {
     return (
       <Button fullWidth color="secondary" variant="contained" sx={{ borderRadius: 6, marginTop: 4 }} onClick={() => { setBottomSheet("addExtension") }}>
@@ -262,14 +282,8 @@ export default function ProcessBuyOrder() {
     return VerifyingBottomsheet()
   }
 
-  function childVerificationComplete() {
-    return VerifiedBottomsheet()
-  }
-
   function childVerificationFail() {
-    return (
-      <Typography variant="body1">Failed to fetch data</Typography>
-    )
+    return VerifyFailedBottomsheet()
   }
 
   const buildAuthHeaders = function (response) {
@@ -296,7 +310,7 @@ export default function ProcessBuyOrder() {
   }
 
   const onNotarizationResult = async function (res) {
-    console.log(res)
+    setBottomSheet("verificationInProgress")
     console.log("send proof to backend to initiate transfer")
     const [requestStatus, verifyResponse] = await apis.backendRequest(
       'orders/buy/verify',
@@ -325,9 +339,15 @@ export default function ProcessBuyOrder() {
       }
       setActiveOrder(newActiveOrder)
       localStorage.setItem("active_onramp_order", JSON.stringify(newActiveOrder))
+
+      setBottomSheet("verificationSuccess")
+
+      console.log("Check transaction status")
+      setTimeout(onTransactionComplete, 5000)
+    } else {
+      console.log("Failed to verify", verifyResponse.reason)
+      setBottomSheet("verificationFailed")
     }
-    console.log("Check transaction status")
-    setTimeout(onTransactionComplete, 5000)
   }
 
   const onTransactionComplete = async function () {
@@ -400,7 +420,13 @@ export default function ProcessBuyOrder() {
         />
 
         <ClickAwayListener onClickAway={() => {
-          if (bottomSheet !== "" && bottomSheet !== "cryptoTransferComplete") setBottomSheet("")
+          if (bottomSheet !== ""
+            && bottomSheet !== "cryptoTransferComplete"
+            && bottomSheet !== "verificationInProgress"
+            && bottomSheet !== "verificationFailed"
+          ) {
+            setBottomSheet("")
+          }
         }}>
           <Box width={1} maxWidth={"450px"}>
             {activeStep === 0 &&
@@ -437,12 +463,14 @@ export default function ProcessBuyOrder() {
                 childExtensionInstalled={childExtensionInstalled()}
                 childExtensionFound={childExtensionFound()}
                 childVerificationInProgress={childVerificationInProgress()}
-                childVerificationComplete={childVerificationComplete()}
+                childVerificationComplete={(<></>)}
                 childVerificationFail={childVerificationFail()}
               />
             }
-            {activeStep === 2 &&
-              <Button fullWidth color="secondary" variant="contained" sx={{ borderRadius: 6, marginTop: 4 }} onClick={() => setBottomSheet("pendingSendCrypto")}>
+            {activeStep === 2 && bottomSheet !== "cryptoTransferComplete" &&
+              <Button fullWidth color="secondary" variant="contained" sx={{ borderRadius: 6, marginTop: 4 }} onClick={() => {
+                if (bottomSheet !== "cryptoTransferComplete") setBottomSheet("pendingSendCrypto")
+              }}>
                 Transaction Pending
               </Button>
             }
@@ -451,8 +479,11 @@ export default function ProcessBuyOrder() {
                 {bottomSheet === "pendingSendFiat" && <SendWithP2pBottomsheet />}
                 {bottomSheet === "confirmingTransfer" && <ConfirmTransferBottomsheet />}
                 {bottomSheet === "addExtension" && <AddJomoCopilotBottomsheet />}
+                {bottomSheet === "verificationInProgress" && <VerifyingBottomsheet />}
+                {bottomSheet === "verificationSuccess" && <VerifiedBottomsheet />}
                 {bottomSheet === "pendingSendCrypto" && <SendingCryptoBottomsheet />}
                 {bottomSheet === "cryptoTransferComplete" && <SentCryptoBottomsheet />}
+                {bottomSheet === "verificationFailed" && <VerifyFailedBottomsheet />}
               </Box>
             }
           </Box>
