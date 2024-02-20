@@ -66,6 +66,7 @@ export default function TransferTo() {
 
   const confirmSendAmount = (value) => {
     if (value > balance.current) setSendAmount(balance.current)
+    if (!value) return
     setState("review")
   }
 
