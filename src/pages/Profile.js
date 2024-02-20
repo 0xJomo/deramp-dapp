@@ -94,7 +94,7 @@ export default function Profile() {
         <Button color="primary" disabled={true} variant="contained" sx={{ borderRadius: 4, width: 0.4, minWidth: "105px" }} onClick={() => { }}>
           Cash Out
         </Button>
-        <IconButton sx={{ padding: 0 }}>
+        <IconButton sx={{ padding: 0 }} onClick={() => { navigate('/send') }}>
           <Iconify height={40} width={40} color={"primary.main"} icon="mdi:send-circle" />
         </IconButton>
       </Stack>
