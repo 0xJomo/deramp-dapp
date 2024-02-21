@@ -27,9 +27,26 @@ export default function Payment() {
           <img
             src="/images/revolut.png"
             alt="revolut"
+            width={"60px"}
+            height={"60px"}
           />
           <Stack justifyContent={"flex-start"} alignItems={"flex-start"} sx={{ marginX: 2 }} >
             <Typography variant="subtitle1">Revolut</Typography>
+            <Typography variant="body1" sx={{ textAlign: "left" }}>No additional KYC, transfer directly P2P</Typography>
+          </Stack>
+        </Stack>
+      </Button>
+
+      <Button sx={{ borderRadius: 4, padding: 2, backgroundColor: "lightgrey" }} onClick={() => selectPayment("venmo")}>
+        <Stack flexDirection={"row"} alignItems={"center"} >
+          <img
+            src="/images/venmo.png"
+            alt="Venmo"
+            width={"60px"}
+            height={"60px"}
+          />
+          <Stack justifyContent={"flex-start"} alignItems={"flex-start"} sx={{ marginX: 2 }} >
+            <Typography variant="subtitle1">Venmo</Typography>
             <Typography variant="body1" sx={{ textAlign: "left" }}>No additional KYC, transfer directly P2P</Typography>
           </Stack>
         </Stack>

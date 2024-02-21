@@ -52,7 +52,7 @@ export default function OrderDisplay({ useGrayBackground = false, collapsable = 
       <Collapse in={!collapsable || !folded}>
         <Stack flexDirection="row" justifyContent="space-between" sx={{ marginTop: 3 }} >
           <Typography>Transfer method</Typography>
-          <Typography>{(platform === "revolut" && "Revolut") || null}</Typography>
+          <Typography>{(platform === "revolut" && "Revolut") || (platform === "venmo" && "Venmo") || null}</Typography>
         </Stack>
 
         <Stack flexDirection="row" justifyContent="space-between" sx={{ marginTop: 3 }} >

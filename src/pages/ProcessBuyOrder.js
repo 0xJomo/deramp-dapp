@@ -21,26 +21,41 @@ export default function ProcessBuyOrder() {
   const navigate = useNavigate();
 
   const p2pAppServer = {
-    "revolut": "app.revolut.com"
+    "revolut": "app.revolut.com",
+    "venmo": "account.venmo.com",
   }[activeOrder?.p2p_platform]
   const extensionId = "nmdnfckjjghlbjeodefnapacfnocpdgm"
   const extensionName = "jomo-copilot"
+
+  const getPlatformDisplay = (platform) => {
+    if (platform === "revolut") return "Revolut"
+    if (platform === "venmo") return "Venmo"
+  }
+
+  const getPlatformPaymentLink = (platform, recipient) => {
+    if (platform === "revolut") {
+      return `https://revolut.me/${recipient}`
+    }
+    if (platform === "venmo") {
+      return `https://venmo.com/u/${recipient}`
+    }
+  }
 
   const STEPS = {
     stepIds: ['send_p2p_payment', 'verify_p2p_paymennt', 'receive_usdc'],
     stepDetails: {
       'send_p2p_payment': {
         stepIdx: 0,
-        label: `Send $${activeOrder?.amount + activeOrder?.fee} on ${(activeOrder?.p2p_platform === "revolut" && "Revolut")} to @${activeOrder?.recipient_id}`,
+        label: `Send $${activeOrder?.amount + activeOrder?.fee} on ${getPlatformDisplay(activeOrder?.p2p_platform)} to @${activeOrder?.recipient_id}`,
         description: `Please send the exact amount to the correct recipient.`,
       },
       'verify_p2p_paymennt': {
         stepIdx: 1,
-        label: `Verify ${(activeOrder?.p2p_platform === "revolut" && "Revolut")} transfer`,
+        label: `Verify ${getPlatformDisplay(activeOrder?.p2p_platform)} transfer`,
         description:
           <Stack gap={2}>
-            <Typography variant="body1">Jomo Co-pilot add-on is required to verify {(activeOrder?.p2p_platform === "revolut" && "Revolut")} transfers. <Link color={"#000"} target="_blank" href={`https://chrome.google.com/webstore/detail/${extensionName}/${extensionId}`}>Install now</Link></Typography>
-            <Typography variant="body1">Sign in {(activeOrder?.p2p_platform === "revolut" && "Revolut")} on the tab poping up and we will help you with the verification.</Typography>
+            <Typography variant="body1">Jomo Co-pilot add-on is required to verify {getPlatformDisplay(activeOrder?.p2p_platform)} transfers. <Link color={"#000"} target="_blank" href={`https://chrome.google.com/webstore/detail/${extensionName}/${extensionId}`}>Install now</Link></Typography>
+            <Typography variant="body1">Sign in {getPlatformDisplay(activeOrder?.p2p_platform)} on the tab poping up and we will help you with the verification.</Typography>
           </Stack>
       },
       'receive_usdc': {
@@ -85,7 +100,7 @@ export default function ProcessBuyOrder() {
         <Stack maxWidth={"550px"} alignItems={"center"} gap={2}>
           <Typography variant="h4" sx={{ marginTop: 2 }}>Confirm transfer</Typography>
           <Typography textAlign={"center"}>
-            Please confirm that you have completed your transfer of <b>exactly ${activeOrder?.amount + activeOrder?.fee}</b> on {(activeOrder?.p2p_platform === "revolut" && "Revolut")} to <b>@{activeOrder?.recipient_id}</b>.
+            Please confirm that you have completed your transfer of <b>exactly ${activeOrder?.amount + activeOrder?.fee}</b> on {getPlatformDisplay(activeOrder?.p2p_platform)} to <b>@{activeOrder?.recipient_id}</b>.
           </Typography>
           <Typography textAlign={"center"}>
             <b>Transferring more than ${activeOrder?.amount + activeOrder?.fee} could result in a loss of funds.</b>
@@ -102,9 +117,7 @@ export default function ProcessBuyOrder() {
   }
 
   async function redirectToP2pPayment(order) {
-    if (activeOrder?.p2p_platform === "revolut") {
-      window.open(`https://revolut.me/${order.recipient_id}`, "_blank")
-    }
+    window.open(getPlatformPaymentLink(order.p2p_platform, order.recipient_id), "_blank")
     setBottomSheet("confirmingTransfer")
   }
 
@@ -112,19 +125,19 @@ export default function ProcessBuyOrder() {
     return (
       <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "#ECECEC", padding: 2, borderRadius: "16px 16px 0 0" }}>
         <Stack maxWidth={"550px"} alignItems={"center"} gap={2}>
-          <Typography variant="h4" sx={{ marginTop: 2 }}>Send with {(activeOrder?.p2p_platform === "revolut" && "Revolut")}</Typography>
+          <Typography variant="h4" sx={{ marginTop: 2 }}>Send with {getPlatformDisplay(activeOrder?.p2p_platform)}</Typography>
           <Typography textAlign={"center"}>
-            Please complete your transfer of <b>exactly ${activeOrder?.amount + activeOrder?.fee}</b> on {(activeOrder?.p2p_platform === "revolut" && "Revolut")} to <b>@{activeOrder?.recipient_id}</b>, then verify the transaction on DeRamp.
+            Please complete your transfer of <b>exactly ${activeOrder?.amount + activeOrder?.fee}</b> on {getPlatformDisplay(activeOrder?.p2p_platform)} to <b>@{activeOrder?.recipient_id}</b>, then verify the transaction on DeRamp.
           </Typography>
           <Typography textAlign={"center"}>
             <b>Transferring more than ${activeOrder?.amount + activeOrder?.fee} could result in a loss of funds.</b>
           </Typography>
-          <QRCode size={120} value={(activeOrder?.p2p_platform === "revolut" && `https://revolut.me/${activeOrder.recipient_id}`)} />
+          <QRCode size={120} value={getPlatformPaymentLink(activeOrder?.p2p_platform, activeOrder?.recipient_id)} />
           <Button color="secondary" variant="contained" sx={{ minWidth: "80%", borderRadius: 6 }} onClick={() => redirectToP2pPayment(activeOrder)}>
-            Go to {(activeOrder?.p2p_platform === "revolut" && "Revolut")}
+            Go to {getPlatformDisplay(activeOrder?.p2p_platform)}
           </Button>
           <Button variant="text" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 2 }} onClick={confirmTransferComplete}>
-            I have completed the transfer in {(activeOrder?.p2p_platform === "revolut" && "Revolut")} app
+            I have completed the transfer in {getPlatformDisplay(activeOrder?.p2p_platform)} app
           </Button>
         </Stack>
       </Stack>
@@ -192,7 +205,7 @@ export default function ProcessBuyOrder() {
               <Typography variant="h4" sx={{ marginTop: 2 }}>Verification complete!</Typography>
               <Iconify height={72} width={72} color={"primary.main"} icon="icon-park-solid:check-one" />
               <Typography textAlign={"center"}>
-                We verified that you've completed a transfer of ${activeOrder?.amount + activeOrder?.fee} to @{activeOrder?.recipient_id} on {(activeOrder?.p2p_platform === "revolut" && "Revolut")}
+                We verified that you've completed a transfer of ${activeOrder?.amount + activeOrder?.fee} to @{activeOrder?.recipient_id} on {getPlatformDisplay(activeOrder?.p2p_platform)}
               </Typography>
               <Button color="secondary" variant="contained" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 2 }} onClick={() => { setActiveStep(2) }}>
                 Done
@@ -273,7 +286,7 @@ export default function ProcessBuyOrder() {
   function childExtensionFound() {
     return (
       <Button fullWidth color="secondary" variant="contained" sx={{ borderRadius: 6, marginTop: 4 }}>
-        Sign-in to {(activeOrder?.p2p_platform === "revolut" && "Revolut")} to verify
+        Sign-in to {getPlatformDisplay(activeOrder?.p2p_platform)} to verify
       </Button>
     )
   }
@@ -286,7 +299,7 @@ export default function ProcessBuyOrder() {
     return VerifyFailedBottomsheet()
   }
 
-  const buildAuthHeaders = function (response) {
+  const buildAuthHeadersRevolut = function (response) {
     const cookie = response.headers["Cookie"]
     const deviceId = response.headers["x-device-id"]
     const userAgent = response.headers["User-Agent"]
@@ -300,12 +313,32 @@ export default function ProcessBuyOrder() {
     return authedHeader
   }
 
-  const buildDataPathWithResponse = function (response) {
+  const buildDataPathWithResponseRevolut = function (response) {
     const account = response["pockets"][0]["id"] || null
     if (!account) {
       return null
     }
     const dataPath = `api/retail/user/current/transactions/last?count=1&internalPocketId=${account}`
+    return dataPath
+  }
+
+  const buildAuthHeadersVenmo = function (response) {
+    const cookie = response.headers["Cookie"]
+
+    const authedHeader = new Map([
+      ["Cookie", cookie],
+      ["Host", p2pAppServer],
+    ])
+    return authedHeader
+  }
+
+  const buildDataPathWithResponseVenmo = function (response) {
+    const myId = response["pageProps"]["currentUser"]["id"] || null
+    const otherId = response["pageProps"]["otherUser"]["id"] || null
+    if (!myId || !otherId) {
+      return null
+    }
+    const dataPath = `api/stories?feedType=betweenYou&otherUserId=${otherId}&externalId=${myId}`
     return dataPath
   }
 
@@ -349,6 +382,7 @@ export default function ProcessBuyOrder() {
       setBottomSheet("verificationFailed")
     }
   }
+
 
   const onTransactionComplete = async function () {
     console.log("transaction complete")
@@ -401,7 +435,7 @@ export default function ProcessBuyOrder() {
 
       <Stack width={0.95} alignItems={"center"}>
         <Typography>
-          Complete your order by transferring ${activeOrder?.amount + activeOrder?.fee} on {(activeOrder?.p2p_platform === "revolut" && "Revolut")} then verify the transaction on DeRamp.
+          Complete your order by transferring ${activeOrder?.amount + activeOrder?.fee} on {getPlatformDisplay(activeOrder?.p2p_platform)} then verify the transaction on DeRamp.
         </Typography>
 
         <VerticalLinearStepper
@@ -431,15 +465,15 @@ export default function ProcessBuyOrder() {
           <Box width={1} maxWidth={"450px"}>
             {activeStep === 0 &&
               <Button fullWidth color="secondary" variant="contained" sx={{ borderRadius: 6, marginTop: 4 }} onClick={() => setBottomSheet("pendingSendFiat")}>
-                Send with {(activeOrder?.p2p_platform === "revolut" && "Revolut")}
+                Send with {getPlatformDisplay(activeOrder?.p2p_platform)}
               </Button>
             }
-            {activeStep === 1 && activeOrder?.p2p_platform === "revolut" && "Revolut" &&
+            {activeStep === 1 && activeOrder?.p2p_platform === "revolut" &&
               <JomoTlsnNotary
                 notaryServers={{
                   notaryServerHost: process.env.REACT_APP_NOTARY_SERVER,
                   notaryServerSsl: process.env.REACT_APP_NOTARY_SSL === "ssl",
-                  websockifyServer: process.env.REACT_APP_WEBSOCKIFY_SERVER,
+                  websockifyServer: process.env.REACT_APP_WEBSOCKIFY_SERVER_REVOLUT,
                 }}
                 // extensionId="hebchjefjhiinmhpkcgcadmmhhfcljed"
                 extensionConfigs={{
@@ -452,12 +486,45 @@ export default function ProcessBuyOrder() {
                 onNotarizationResult={onNotarizationResult}
                 defaultNotaryFlowConfigs={{
                   defaultNotaryFlow: true,
-                  buildAuthHeaders: buildAuthHeaders,
+                  buildAuthHeaders: buildAuthHeadersRevolut,
                   queryPath: "api/retail/user/current/wallet",
                   queryMethod: "GET",
-                  buildDataPathWithResponse: buildDataPathWithResponse,
+                  buildDataPathWithResponse: buildDataPathWithResponseRevolut,
                   dataMethod: "GET",
                   keysToNotarize: [["account"], ["amount"], ["category"], ["comment"], ["completeDate"], ["id"], ["state"], ["recipient", "id"], ["recipient", "code"], ["currency"]],
+                }}
+                childExtensionNotFound={childExtensionNotFound()}
+                childExtensionInstalled={childExtensionInstalled()}
+                childExtensionFound={childExtensionFound()}
+                childVerificationInProgress={childVerificationInProgress()}
+                childVerificationComplete={(<></>)}
+                childVerificationFail={childVerificationFail()}
+              />
+            }
+            {activeStep === 1 && activeOrder?.p2p_platform === "venmo" &&
+              <JomoTlsnNotary
+                notaryServers={{
+                  notaryServerHost: process.env.REACT_APP_NOTARY_SERVER,
+                  notaryServerSsl: process.env.REACT_APP_NOTARY_SSL === "ssl",
+                  websockifyServer: process.env.REACT_APP_WEBSOCKIFY_SERVER_VENMO,
+                }}
+                // extensionId="hebchjefjhiinmhpkcgcadmmhhfcljed"
+                extensionConfigs={{
+                  redirectUrl: "https://account.venmo.com",
+                  urlFilters: ["https://account.venmo.com/api/stories*"],
+                }}
+                applicationConfigs={{
+                  appServer: p2pAppServer,
+                }}
+                onNotarizationResult={onNotarizationResult}
+                defaultNotaryFlowConfigs={{
+                  defaultNotaryFlow: true,
+                  buildAuthHeaders: buildAuthHeadersVenmo,
+                  queryPath: `_next/data/yfFKvOghGoGRKAQd7gmEx/en/u/logged-in/${activeOrder?.recipient_id}.json?username=${activeOrder?.recipient_id}`,
+                  queryMethod: "GET",
+                  buildDataPathWithResponse: buildDataPathWithResponseVenmo,
+                  dataMethod: "GET",
+                  keysToNotarize: [["stories", "amount"], ["stories", "date"], ["stories", "id"], ["stories", "type"], ["stories", "title"]],
                 }}
                 childExtensionNotFound={childExtensionNotFound()}
                 childExtensionInstalled={childExtensionInstalled()}
