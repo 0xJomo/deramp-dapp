@@ -65,7 +65,12 @@ export default function TransferTo() {
   }
 
   const confirmSendAmount = (value) => {
-    if (value > balance.current) setSendAmount(balance.current)
+    if (value > balance.current) {
+      setSendAmount(balance.current.toFixed(2))
+    }
+    else {
+      setSendAmount(value)
+    }
     if (!value) return
     setState("review")
   }
