@@ -17,7 +17,7 @@ const usdcAbi = [
   // Transfer
   "function transfer(address to, uint amount) returns (bool)",
 ];
-const usdcAddress = "0x757f842e1bd3494f3ffe495925e6c418f80c0767"
+const usdcAddress = process.env.REACT_APP_USDC_ADDRESS
 
 export default function TransferTo() {
 
@@ -83,7 +83,7 @@ export default function TransferTo() {
     setState("sending")
     const provider = new ethers.providers.JsonRpcProvider("https://arb-mainnet.g.alchemy.com/v2/tK12GftbZkdgJnTwaDYeTBkjOgXrTGWK");
     const erc20 = new ethers.Contract(usdcAddress, usdcAbi, provider);
-    const transferTx = await erc20.populateTransaction.transfer(receiver, BigInt(parseFloat(amount) * 1e18))
+    const transferTx = await erc20.populateTransaction.transfer(receiver, BigInt(parseFloat(amount) * 1e6))
     const txHash = await sendTransaction(transferTx)
     setTxHash(txHash)
     setState("sent")
@@ -118,8 +118,8 @@ export default function TransferTo() {
           const provider = new ethers.providers.JsonRpcProvider("https://arb-mainnet.g.alchemy.com/v2/tK12GftbZkdgJnTwaDYeTBkjOgXrTGWK");
           const erc20 = new ethers.Contract(usdcAddress, usdcAbi, provider);
           erc20.balanceOf(address).then((amount) => {
-            console.log("balance", parseFloat(amount) / 1e18)
-            balance.current = parseFloat(amount) / 1e18
+            console.log("balance", parseFloat(amount) / 1e6)
+            balance.current = parseFloat(amount) / 1e6
             setBalance(balance.current.toFixed(2))
           })
         })

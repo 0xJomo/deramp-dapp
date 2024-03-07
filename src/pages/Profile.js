@@ -13,12 +13,12 @@ const usdcAbi = [
   // Approve
   "function approve(address _spender, uint256 _value) returns (bool)",
 ];
-const usdcAddress = "0x757f842e1bd3494f3ffe495925e6c418f80c0767"
+const usdcAddress = process.env.REACT_APP_USDC_ADDRESS
 
 const derampAbi = [
   "function offramp(string paymentProcessor, string ppId, uint256 amount, address _receiver) nonpayable returns ()",
 ]
-const derampVaultAddress = "0x8AA103410431D508bd64a74BcDcC1369473Ad377"
+const derampVaultAddress = process.env.REACT_APP_DERAMP_ADDRESS
 
 export default function Profile() {
   const { ready, authenticated, zeroDevReady, logout, getAccessToken, getEthereumProvider, sendTransaction } = usePrivySmartAccount();
@@ -32,13 +32,13 @@ export default function Profile() {
     if (!walletAddress.current) return
 
     const erc20 = new ethers.Contract(usdcAddress, usdcAbi);
-    const approveUSDC = await erc20.populateTransaction.approve(derampVaultAddress, BigInt(amount * 1e18));
+    const approveUSDC = await erc20.populateTransaction.approve(derampVaultAddress, BigInt(amount * 1e6));
     await sendTransaction(approveUSDC)
 
     console.log("approved")
 
     const derampVault = new ethers.Contract(derampVaultAddress, derampAbi);
-    const offramp = await derampVault.populateTransaction.offramp("revolut", "yuchennlxy", BigInt(amount * 1e18), walletAddress.current);
+    const offramp = await derampVault.populateTransaction.offramp("revolut", "yuchennlxy", BigInt(amount * 1e6), walletAddress.current);
     await sendTransaction(offramp)
     console.log("offramped")
   }
@@ -71,8 +71,8 @@ export default function Profile() {
           const provider = new ethers.providers.JsonRpcProvider("https://arb-mainnet.g.alchemy.com/v2/tK12GftbZkdgJnTwaDYeTBkjOgXrTGWK");
           const erc20 = new ethers.Contract(usdcAddress, usdcAbi, provider);
           erc20.balanceOf(address).then((amount) => {
-            console.log("balance", parseFloat(amount) / 1e18)
-            setBalance(parseFloat(amount) / 1e18)
+            console.log("balance", parseFloat(amount) / 1e6)
+            setBalance(parseFloat(amount) / 1e6)
           })
         })
       }

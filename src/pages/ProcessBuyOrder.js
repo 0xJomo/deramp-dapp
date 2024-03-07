@@ -333,8 +333,18 @@ export default function ProcessBuyOrder() {
   }
 
   const buildDataPathWithResponseVenmo = function (response) {
-    const myId = response["pageProps"]["currentUser"]["id"] || null
-    const otherId = response["pageProps"]["otherUser"]["id"] || null
+    var myId = ""
+    var otherId = ""
+
+    for (const story of response["stories"]) {
+      if (story.audience !== "private") continue
+      if (story.title.receiver.username === activeOrder.recipient_id) {
+        otherId = story.title.receiver.id
+        myId = story.title.sender.id
+        break
+      }
+    }
+
     if (!myId || !otherId) {
       return null
     }
@@ -526,7 +536,7 @@ export default function ProcessBuyOrder() {
                 defaultNotaryFlowConfigs={{
                   defaultNotaryFlow: true,
                   buildAuthHeaders: buildAuthHeadersVenmo,
-                  queryPath: `_next/data/yfFKvOghGoGRKAQd7gmEx/en/u/logged-in/${activeOrder?.recipient_id}.json?username=${activeOrder?.recipient_id}`,
+                  queryPath: `api/stories?feedType=friend`,
                   queryMethod: "GET",
                   buildDataPathWithResponse: buildDataPathWithResponseVenmo,
                   dataMethod: "GET",
