@@ -24,7 +24,7 @@ export default function TransferTo() {
   const { ready, authenticated, zeroDevReady, logout, getEthereumProvider, sendTransaction } = usePrivySmartAccount();
   const navigate = useNavigate();
   const isFirstMount = useRef(true)
-  const chain = "Sepolia"
+  const chain = "Arbitrum"
 
   const [receiver, setReceiver] = useState("")
   const [sendAmount, setSendAmount] = useState("")
@@ -81,7 +81,7 @@ export default function TransferTo() {
 
   const sendMoney = async (amount, receiver) => {
     setState("sending")
-    const provider = new ethers.providers.JsonRpcProvider("https://eth-sepolia.g.alchemy.com/v2/v178sXJ0X49qRdgINzyuNbEvKsMXob4W");
+    const provider = new ethers.providers.JsonRpcProvider("https://arb-mainnet.g.alchemy.com/v2/tK12GftbZkdgJnTwaDYeTBkjOgXrTGWK");
     const erc20 = new ethers.Contract(usdcAddress, usdcAbi, provider);
     const transferTx = await erc20.populateTransaction.transfer(receiver, BigInt(parseFloat(amount) * 1e18))
     const txHash = await sendTransaction(transferTx)
@@ -115,7 +115,7 @@ export default function TransferTo() {
         })
 
         getEthereumProvider().getAddress().then((address) => {
-          const provider = new ethers.providers.JsonRpcProvider("https://eth-sepolia.g.alchemy.com/v2/v178sXJ0X49qRdgINzyuNbEvKsMXob4W");
+          const provider = new ethers.providers.JsonRpcProvider("https://arb-mainnet.g.alchemy.com/v2/tK12GftbZkdgJnTwaDYeTBkjOgXrTGWK");
           const erc20 = new ethers.Contract(usdcAddress, usdcAbi, provider);
           erc20.balanceOf(address).then((amount) => {
             console.log("balance", parseFloat(amount) / 1e18)
@@ -204,7 +204,7 @@ export default function TransferTo() {
 
             <Stack flexDirection="row" justifyContent="space-between" sx={{ marginTop: 3 }} >
               <Typography>Network</Typography>
-              <Typography>Sepolia</Typography>
+              <Typography>Arbitrum</Typography>
             </Stack>
 
             <Divider sx={{ marginTop: 4 }} />
@@ -238,7 +238,7 @@ export default function TransferTo() {
           <Stack width={1} gap={2}>
             <Button fullWidth variant='contained' onClick={() => navigate('/profile')}>Continue</Button>
             <Button fullWidth variant='text' onClick={() => {
-              window.open(`https://sepolia.etherscan.io/tx/${txHash}`, '_blank')
+              window.open(`https://arbiscan.io/tx/${txHash}`, '_blank')
             }}>View Transaction</Button>
           </Stack>
         </Stack>

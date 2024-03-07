@@ -10,7 +10,7 @@ export default function ReviewOrder() {
 
   const { amount, platform, activeOrder, setActiveOrder } = useUserContext()
 
-  const chain = "Sepolia"
+  const chain = "Arbitrum"
 
   const processOrder = async function (amount, platform) {
     if (activeOrder

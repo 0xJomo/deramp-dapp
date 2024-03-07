@@ -68,7 +68,7 @@ export default function Profile() {
         getEthereumProvider().getAddress().then((address) => {
           localStorage.setItem("wallet_address", address)
           walletAddress.current = address
-          const provider = new ethers.providers.JsonRpcProvider("https://eth-sepolia.g.alchemy.com/v2/v178sXJ0X49qRdgINzyuNbEvKsMXob4W");
+          const provider = new ethers.providers.JsonRpcProvider("https://arb-mainnet.g.alchemy.com/v2/tK12GftbZkdgJnTwaDYeTBkjOgXrTGWK");
           const erc20 = new ethers.Contract(usdcAddress, usdcAbi, provider);
           erc20.balanceOf(address).then((amount) => {
             console.log("balance", parseFloat(amount) / 1e18)

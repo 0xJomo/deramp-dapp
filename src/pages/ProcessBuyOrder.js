@@ -383,6 +383,10 @@ export default function ProcessBuyOrder() {
     }
   }
 
+  const onNotarizationError = async function (e) {
+    console.log(e)
+    setBottomSheet("verificationFailed")
+  }
 
   const onTransactionComplete = async function () {
     console.log("transaction complete")
@@ -484,6 +488,7 @@ export default function ProcessBuyOrder() {
                   appServer: p2pAppServer,
                 }}
                 onNotarizationResult={onNotarizationResult}
+                onNotarizationError={onNotarizationError}
                 defaultNotaryFlowConfigs={{
                   defaultNotaryFlow: true,
                   buildAuthHeaders: buildAuthHeadersRevolut,
@@ -517,6 +522,7 @@ export default function ProcessBuyOrder() {
                   appServer: p2pAppServer,
                 }}
                 onNotarizationResult={onNotarizationResult}
+                onNotarizationError={onNotarizationError}
                 defaultNotaryFlowConfigs={{
                   defaultNotaryFlow: true,
                   buildAuthHeaders: buildAuthHeadersVenmo,
