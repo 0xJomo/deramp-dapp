@@ -18,6 +18,9 @@ export default function ProcessBuyOrder() {
   const accessToken = useRef(null)
   const isFirstMount = useRef(true)
 
+  const isFirefox = typeof InstallTrigger !== 'undefined';
+  const isChrome = !!window.chrome;
+
   const navigate = useNavigate();
 
   const p2pAppServer = {
@@ -54,7 +57,12 @@ export default function ProcessBuyOrder() {
         label: `Verify ${getPlatformDisplay(activeOrder?.p2p_platform)} transfer`,
         description:
           <Stack gap={2}>
-            <Typography variant="body1">Jomo Co-pilot add-on is required to verify {getPlatformDisplay(activeOrder?.p2p_platform)} transfers. <Link color={"#000"} target="_blank" href={`https://chrome.google.com/webstore/detail/${extensionName}/${extensionId}`}>Install now</Link></Typography>
+            {isChrome &&
+              <Typography variant="body1">Jomo Co-pilot extension is required to verify {getPlatformDisplay(activeOrder?.p2p_platform)} transfers. <Link color={"#000"} target="_blank" href={`https://chrome.google.com/webstore/detail/${extensionName}/${extensionId}`}>Install now</Link></Typography>
+            }
+            {isFirefox &&
+              <Typography variant="body1">Jomo Co-pilot add-on is required to verify {getPlatformDisplay(activeOrder?.p2p_platform)} transfers. <Link color={"#000"} target="_blank" href={`https://addons.mozilla.org/en-US/firefox/addon/jomo-copilot/`}>Install now</Link></Typography>
+            }
             <Typography variant="body1">Sign in {getPlatformDisplay(activeOrder?.p2p_platform)} on the tab poping up and we will help you with the verification.</Typography>
           </Stack>
       },
@@ -96,7 +104,7 @@ export default function ProcessBuyOrder() {
 
   function ConfirmTransferBottomsheet() {
     return (
-      <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "#ECECEC", padding: 2, borderRadius: "16px 16px 0 0" }}>
+      <Stack alignItems="center" sx={{ zIndex: 800, position: "fixed", left: 0, right: 0, bottom: 0, background: "#ECECEC", padding: 2, borderRadius: "16px 16px 0 0" }}>
         <Stack maxWidth={"550px"} alignItems={"center"} gap={2}>
           <Typography variant="h4" sx={{ marginTop: 2 }}>Confirm transfer</Typography>
           <Typography textAlign={"center"}>
@@ -123,7 +131,7 @@ export default function ProcessBuyOrder() {
 
   function SendWithP2pBottomsheet() {
     return (
-      <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "#ECECEC", padding: 2, borderRadius: "16px 16px 0 0" }}>
+      <Stack alignItems="center" sx={{ zIndex: 800, position: "fixed", left: 0, right: 0, bottom: 0, background: "#ECECEC", padding: 2, borderRadius: "16px 16px 0 0" }}>
         <Stack maxWidth={"550px"} alignItems={"center"} gap={2}>
           <Typography variant="h4" sx={{ marginTop: 2 }}>Send with {getPlatformDisplay(activeOrder?.p2p_platform)}</Typography>
           <Typography textAlign={"center"}>
@@ -146,19 +154,29 @@ export default function ProcessBuyOrder() {
 
   function AddJomoCopilotBottomsheet() {
     return (
-      <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "#ECECEC", padding: 2, borderRadius: "16px 16px 0 0" }}>
+      <Stack alignItems="center" sx={{ zIndex: 800, position: "fixed", left: 0, right: 0, bottom: 0, background: "#ECECEC", padding: 2, borderRadius: "16px 16px 0 0" }}>
         <Stack maxWidth={"550px"} alignItems={"center"} gap={2}>
           <Typography variant="h4" sx={{ marginTop: 2 }}>Add Jomo Copilot</Typography>
           <Typography textAlign={"center"}>
             Jomo Copilot extension is required to verify peer-to-peer transfers on apps like Revolut
             and Venmo to then send you crypto on-chain. Jomo uses cryptography so that your user data is not read or stored any where.
           </Typography>
-          <Button color="secondary" variant="contained" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 2 }} onClick={() => {
-            window.open(`https://chrome.google.com/webstore/detail/${extensionName}/${extensionId}`, '_blank');
-            setBottomSheet("extensionAdded")
-          }}>
-            Install Jomo Copilot extension
-          </Button>
+          {isChrome &&
+            <Button color="secondary" variant="contained" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 2 }} onClick={() => {
+              window.open(`https://chrome.google.com/webstore/detail/${extensionName}/${extensionId}`, '_blank');
+              setBottomSheet("extensionAdded")
+            }}>
+              Install Jomo Copilot extension
+            </Button>
+          }
+          {isFirefox &&
+            <Button color="secondary" variant="contained" sx={{ minWidth: "80%", borderRadius: 6, marginBottom: 2 }} onClick={() => {
+              window.open(`https://addons.mozilla.org/en-US/firefox/addon/jomo-copilot/`, '_blank');
+              setBottomSheet("extensionAdded")
+            }}>
+              Install Jomo Copilot addon
+            </Button>
+          }
         </Stack>
       </Stack>
     )
@@ -168,7 +186,7 @@ export default function ProcessBuyOrder() {
     return (
       <>
         {bottomSheet === "extensionAdded" &&
-          <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "#ECECEC", padding: 2, borderRadius: "16px 16px 0 0" }}>
+          <Stack alignItems="center" sx={{ zIndex: 800, position: "fixed", left: 0, right: 0, bottom: 0, background: "#ECECEC", padding: 2, borderRadius: "16px 16px 0 0" }}>
             <Stack maxWidth={"550px"} alignItems={"center"} gap={2}>
               <Typography variant="h4" sx={{ marginTop: 2 }}>Jomo Copilot Added!</Typography>
               <Iconify height={72} width={72} color={"primary.main"} icon="icon-park-solid:check-one" />
@@ -184,7 +202,7 @@ export default function ProcessBuyOrder() {
 
   function VerifyingBottomsheet() {
     return (
-      <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "#ECECEC", padding: 2, borderRadius: "16px 16px 0 0" }}>
+      <Stack alignItems="center" sx={{ zIndex: 800, position: "fixed", left: 0, right: 0, bottom: 0, background: "#ECECEC", padding: 2, borderRadius: "16px 16px 0 0" }}>
         <Stack maxWidth={"550px"} alignItems={"center"} gap={2}>
           <Typography variant="h4" sx={{ marginTop: 2 }}>Verifying...</Typography>
           <CircularProgress size={72} color="primary" />
@@ -200,7 +218,7 @@ export default function ProcessBuyOrder() {
     return (
       <>
         {activeStep === 1 &&
-          <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "#ECECEC", padding: 2, borderRadius: "16px 16px 0 0" }}>
+          <Stack alignItems="center" sx={{ zIndex: 800, position: "fixed", left: 0, right: 0, bottom: 0, background: "#ECECEC", padding: 2, borderRadius: "16px 16px 0 0" }}>
             <Stack maxWidth={"550px"} alignItems={"center"} gap={2}>
               <Typography variant="h4" sx={{ marginTop: 2 }}>Verification complete!</Typography>
               <Iconify height={72} width={72} color={"primary.main"} icon="icon-park-solid:check-one" />
@@ -219,7 +237,7 @@ export default function ProcessBuyOrder() {
 
   function SendingCryptoBottomsheet() {
     return (
-      <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "#ECECEC", padding: 2, borderRadius: "16px 16px 0 0" }}>
+      <Stack alignItems="center" sx={{ zIndex: 800, position: "fixed", left: 0, right: 0, bottom: 0, background: "#ECECEC", padding: 2, borderRadius: "16px 16px 0 0" }}>
         <Stack maxWidth={"550px"} alignItems={"center"} gap={2}>
           <Typography variant="h4" sx={{ marginTop: 2 }}>Transaction Pending</Typography>
           <CircularProgress size={72} color="primary" />
@@ -236,7 +254,7 @@ export default function ProcessBuyOrder() {
 
   function SentCryptoBottomsheet() {
     return (
-      <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "#ECECEC", padding: 2, borderRadius: "16px 16px 0 0" }}>
+      <Stack alignItems="center" sx={{ zIndex: 800, position: "fixed", left: 0, right: 0, bottom: 0, background: "#ECECEC", padding: 2, borderRadius: "16px 16px 0 0" }}>
         <Stack maxWidth={"550px"} alignItems={"center"} gap={2}>
           <Typography variant="h4" sx={{ marginTop: 2 }}>You got crypto!</Typography>
           <Iconify height={72} width={72} color={"success.main"} icon="icon-park-solid:check-one" />
@@ -253,7 +271,7 @@ export default function ProcessBuyOrder() {
 
   function VerifyFailedBottomsheet() {
     return (
-      <Stack alignItems="center" sx={{ position: "fixed", left: 0, right: 0, bottom: 0, background: "#ECECEC", padding: 2, borderRadius: "16px 16px 0 0" }}>
+      <Stack alignItems="center" sx={{ zIndex: 800, position: "fixed", left: 0, right: 0, bottom: 0, background: "#ECECEC", padding: 2, borderRadius: "16px 16px 0 0" }}>
         <Stack maxWidth={"550px"} alignItems={"center"} gap={2}>
           <Typography variant="h4" sx={{ marginTop: 2 }}>Failed to verify</Typography>
           <Iconify height={72} width={72} color={"error.main"} icon="radix-icons:cross-1" />
